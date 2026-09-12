@@ -1,17 +1,7 @@
 [project]
 name = "profiflow"
 version = "0.1.0"
-description = "ProfiFlow — здесь только профи"
-authors = [
-    {name = "Sergey Ivanov",email = "ivanitch.mail@gmail.com"}
-]
+description = "Сервис онлайн-записи для бьюти-мастеров и небольших студий"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-    "django (>=6.0.7,<7.0.0)"
-]
-
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+dependencies = []
