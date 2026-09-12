@@ -1,5 +1,7 @@
+from config.settings.base import APP_NAME
+
 def main():
-    print("Hello from profiflow!")
+    print(APP_NAME)
 
 
 if __name__ == "__main__":
