@@ -4,4 +4,19 @@ version = "0.1.0"
 description = "Сервис онлайн-записи для бьюти-мастеров и небольших студий"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "django>=6.1.1",
+    "django-extensions>=4.1",
+    "django-tailwind[reload]>=4.5.0",
+    "ipython>=9.17.1",
+    "pillow>=12.3.0",
+    "psycopg>=3.3.5",
+    "python-dotenv>=1.2.3",
+    "python-slugify>=9.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=8.0.0",
+    "pytest-django>=4.14.0",
+]
