@@ -6,4 +6,5 @@ def home_page(request):
         'title': 'ProfiFlow 🦋 сервис онлайн-записи для бьюти-мастеров и студий',
         'h1': 'Hello, world! 👋',
     }
+    
     return render(request, 'main/home.html', context)
