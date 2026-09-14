@@ -1,17 +1,12 @@
-# Profi Flow
+<p align="center"><a href="https://profiflow.pro" target="_blank">
+    <img src="docs/img/profiflow.jpeg" alt="ProfiFlow Logo">
+</a></p>
 
 Cервис онлайн-записи для бьюти-мастеров и небольших студий.
 
 ## Стек технологий
 
-* **OS:** Linux/Debian
-* **Инфраструктура:** Docker, Docker Compose (`v2`), Make
-* **Язык:** Python `3.12+`
-* **Менеджер пакетов:** `uv`
-* **Фреймворк:** Django `6.1`
-* **База данных:** PostgreSQL `18`
-* **Кэш / Брокер:** Redis `8`
-* **Веб-сервер:** Nginx `1.31`
+![Debian](https://img.shields.io/badge/Debian-OS-A81D33?logo=debian&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-v2-2496ED?logo=docker&logoColor=white) ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white) ![uv](https://img.shields.io/badge/uv-Manager-8A2BE2) ![Django](https://img.shields.io/badge/Django-6.1-092E20?logo=django&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-4169E1?logo=postgresql&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-8-DC382D?logo=redis&logoColor=white) ![Nginx](https://img.shields.io/badge/Nginx-1.31-009639?logo=nginx&logoColor=white)
 
 ## Быстрый старт
 
@@ -28,7 +23,7 @@ cd profiflow
 cp .env.example .env
 ```
 
-3. **Сборка и запуск контейнеров:**
+3. **Сборка и запуск контейнеров (Make):**
 
 ```bash
 make build
@@ -54,32 +49,7 @@ make migrate
 
 ---
 
-## Шпаргалка по командам (Make)
+## Дополнительно
 
-```bash
-make                # Вызов `make help` - просмотр всех команд
+- [Шпаргалка по командам Make](docs/make.md)
 
-## --- Управление контейнерами ---
-make build    # Собрать/Пересобрать образы
-make up       # Запустить проект в фоне
-make down     # Остановить контейнеры (данные в БД сохраняются)
-make destroy  # Остановить и полностью удалить контейнеры и данные БД
-make logs     # Смотреть логи всех сервисов
-make logs-web # Смотреть логи только Django
-make logs-db  # Смотреть логи только Postgresql
-
-## --- Работа с Django ---
-make shell          # Зайти внутрь контейнера с Django (bash)
-make db-shell       # Зайти внутрь контейнера с Postgresql
-make makemigrations # Создать миграции БД
-make migrate        # Применить миграции БД
-make superuser      # Новый супер-пользователь
-
-## --- Terminal workflow ---
-# Зайти внутрь контейнера с Django
-make shell
-# -> команды внутри контейнера с Django
-python manage.py shell          # Запустить интерактивную оболочку Django
-python manage.py makemigrations # Создать миграции БД
-python manage.py  migrate       # Применить миграции БД
-```
