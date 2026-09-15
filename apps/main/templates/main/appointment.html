@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <title>Онлайн-запись - ProfiFlow</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <script>
+        // Тема может браться из настроек мастера, но оставим поддержку переключения
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Подключаем Tailwind (здесь используй свой стандартный тег Django) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        jira: {
+                            bg: 'var(--jira-bg)',
+                            panel: 'var(--jira-panel)',
+                            border: 'var(--jira-border)',
+                            text: 'var(--jira-text)',
+                            textBright: 'var(--jira-textBright)',
+                            primary: '#0c66e4',
+                            primaryHover: '#0052cc',
+                            accent: '#579dff',
+                            accentBg: 'rgba(87, 157, 255, 0.15)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Те же переменные, что и в основном проекте */
+        :root {
+            --jira-bg: #f4f5f7;
+            --jira-panel: #ffffff;
+            --jira-border: #dfe1e6;
+            --jira-text: #5e6c84;
+            --jira-textBright: #172b4d;
+        }
+        .dark {
+            --jira-bg: #1d2125;
+            --jira-panel: #22272b;
+            --jira-border: #2c333a;
+            --jira-text: #8c9bab;
+            --jira-textBright: #b6c2cf;
+        }
+        /* Убираем скроллбар для эстетики мини-аппа */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="bg-jira-bg text-jira-text font-sans text-sm min-h-screen flex flex-col items-center antialiased">
+
+    <!-- Контейнер виджета (мобильный экран) -->
+    <div class="w-full max-w-md bg-jira-panel min-h-screen sm:min-h-[auto] sm:h-[850px] sm:mt-10 sm:rounded-2xl sm:border border-jira-border shadow-2xl flex flex-col overflow-hidden relative">
+
+        <!-- Шапка: Обложка и Аватар -->
+        <div class="relative h-28 bg-gradient-to-r from-blue-900 to-indigo-900 shrink-0">
+             <div class="absolute -bottom-8 left-6">
+                  <div class="avatar shadow-lg rounded-full">
+                       <div class="w-16 h-16 rounded-full ring-4 ring-jira-panel bg-indigo-800 text-indigo-100 flex items-center justify-center text-xl font-bold">
+                            СЕ
+                       </div>
+                  </div>
+             </div>
+        </div>
+
+        <!-- Информация о мастере/салоне -->
+        <div class="pt-10 px-6 pb-5 border-b border-jira-border shrink-0">
+            <h1 class="text-xl font-bold text-jira-textBright">Сергей</h1>
+            <p class="text-xs text-jira-text mt-1">Топ-мастер • Салон "Beauty"</p>
+            <div class="mt-3 flex items-center gap-2 text-xs text-jira-text">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                г. Благовещенск
+            </div>
+        </div>
+
+        <!-- Прокручиваемая область с шагами (Wizard) -->
+        <div class="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-8 pb-28 no-scrollbar">
+
+            <!-- ШАГ 1: Услуги -->
+            <div class="flex flex-col gap-3">
+                <h2 class="text-xs font-semibold text-jira-text uppercase tracking-wide">1. Выберите услугу</h2>
+
+                <!-- Выбранная услуга -->
+                <label class="bg-jira-accentBg border-2 border-jira-accent rounded-xl p-3.5 cursor-pointer flex justify-between items-center transition-all shadow-sm">
+                    <div class="flex flex-col gap-1">
+                        <span class="font-semibold text-jira-accent">Сложное окрашивание</span>
+                        <span class="text-xs text-jira-text">3 ч 30 мин</span>
+                    </div>
+                    <span class="font-bold text-jira-accent">от 8 500 ₽</span>
+                </label>
+
+                <!-- Невыбранная услуга -->
+                <label class="bg-jira-bg border border-jira-border rounded-xl p-3.5 cursor-pointer hover:border-jira-text transition-colors flex justify-between items-center group">
+                    <div class="flex flex-col gap-1">
+                        <span class="font-medium text-jira-textBright group-hover:text-jira-textBright">Стрижка женская</span>
+                        <span class="text-xs text-jira-text">1 ч</span>
+                    </div>
+                    <span class="font-semibold text-jira-textBright">1 500 ₽</span>
+                </label>
+            </div>
+
+            <!-- ШАГ 2: Дата и Время -->
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-between items-end">
+                    <h2 class="text-xs font-semibold text-jira-text uppercase tracking-wide">2. Дата и время</h2>
+                    <span class="text-[10px] text-jira-text font-medium uppercase">Сентябрь 2026</span>
+                </div>
+
+                <!-- Даты (Скролл по горизонтали) -->
+                <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar -mx-2 px-2">
+                    <!-- Неактивная/Прошедшая -->
+                    <div class="shrink-0 w-12 py-2 bg-jira-bg/50 border border-transparent rounded-lg flex flex-col items-center justify-center text-center opacity-40 cursor-not-allowed">
+                        <span class="text-[10px] uppercase">Вт</span>
+                        <span class="text-base font-semibold">15</span>
+                    </div>
+                    <!-- Выбранная -->
+                    <div class="shrink-0 w-12 py-2 bg-jira-primary text-white shadow-md rounded-lg flex flex-col items-center justify-center text-center cursor-pointer">
+                        <span class="text-[10px] uppercase opacity-90">Ср</span>
+                        <span class="text-base font-semibold">16</span>
+                    </div>
+                    <!-- Доступная -->
+                    <div class="shrink-0 w-12 py-2 bg-jira-bg border border-jira-border text-jira-textBright rounded-lg flex flex-col items-center justify-center text-center cursor-pointer hover:border-jira-text transition-colors">
+                        <span class="text-[10px] uppercase text-jira-text">Чт</span>
+                        <span class="text-base font-semibold">17</span>
+                    </div>
+                    <div class="shrink-0 w-12 py-2 bg-jira-bg border border-jira-border text-jira-textBright rounded-lg flex flex-col items-center justify-center text-center cursor-pointer hover:border-jira-text transition-colors">
+                        <span class="text-[10px] uppercase text-jira-text">Пт</span>
+                        <span class="text-base font-semibold">18</span>
+                    </div>
+                </div>
+
+                <!-- Время (Сетка) -->
+                <div class="grid grid-cols-4 gap-2 mt-2">
+                    <div class="py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-transparent text-jira-text opacity-40 cursor-not-allowed line-through">10:00</div>
+                    <div class="py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors">11:00</div>
+                    <div class="py-2 text-center text-xs font-medium rounded-md bg-jira-accent text-white shadow-sm cursor-pointer border border-transparent">13:30</div>
+                    <div class="py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors">15:00</div>
+                </div>
+            </div>
+
+            <!-- ШАГ 3: Контакты -->
+            <div class="flex flex-col gap-3">
+                <h2 class="text-xs font-semibold text-jira-text uppercase tracking-wide">3. Ваши данные</h2>
+                <div class="flex flex-col gap-3">
+                    <input type="text" placeholder="Ваше имя" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent h-10 px-3" />
+                    <input type="tel" placeholder="+7 (___) ___-__-__" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent h-10 px-3" />
+                    <textarea class="textarea textarea-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent h-16 py-2 px-3 leading-relaxed" placeholder="Комментарий (необязательно)"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Подвал с фиксированной кнопкой -->
+        <div class="absolute bottom-0 w-full bg-jira-panel border-t border-jira-border p-4 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
+            <button class="w-full py-3 bg-jira-primary text-white rounded-lg text-sm font-semibold hover:bg-jira-primaryHover transition-all shadow-md flex justify-between items-center px-5 focus:scale-[0.98]">
+                <span>Подтвердить запись</span>
+                <span>8 500 ₽</span>
+            </button>
+        </div>
+
+    </div>
+</body>
+</html>

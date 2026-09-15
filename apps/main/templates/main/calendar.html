@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Расписание - ProfiFlow{% endblock %}
+
+{% block content %}
+    <!-- Хедер календаря -->
+    <div class="px-4 md:px-8 py-4 shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 bg-jira-bg border-b border-jira-border">
+
+        <!-- Навигация по датам -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+            <h1 class="text-xl font-semibold text-jira-textBright">Сентябрь 2026</h1>
+
+            <div class="flex items-center gap-3">
+                <div class="flex items-center bg-jira-panel border border-jira-border rounded-md shadow-sm">
+                    <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-bg transition-colors rounded-l-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <span class="px-3 text-sm font-medium text-jira-textBright border-x border-jira-border">14 - 20 Сен</span>
+                    <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-bg transition-colors rounded-r-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+                <button class="px-3 py-1.5 text-sm font-medium text-jira-text hover:text-jira-textBright transition-colors border border-jira-border rounded-md bg-jira-panel shadow-sm">
+                    Сегодня
+                </button>
+            </div>
+        </div>
+
+        <!-- Переключатели вида и кнопка записи -->
+        <div class="flex items-center gap-3">
+            <div class="hidden md:flex bg-jira-panel border border-jira-border rounded-md shadow-sm overflow-hidden">
+                <button class="px-3 py-1 text-sm text-jira-text hover:bg-jira-bg transition-colors border-r border-jira-border">День</button>
+                <button class="px-3 py-1 text-sm bg-jira-accentBg text-jira-accent font-medium border-r border-jira-border">Неделя</button>
+                <button class="px-3 py-1 text-sm text-jira-text hover:bg-jira-bg transition-colors">Месяц</button>
+            </div>
+
+            <label for="booking_modal" class="cursor-pointer px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <span class="hidden sm:inline">Запись</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Область сетки (С горизонтальным скроллом для мобильных) -->
+    <div class="flex-1 overflow-auto bg-jira-panel flex flex-col relative z-0">
+
+        <!-- Задаем минимальную ширину, чтобы сетка не сжималась на телефонах -->
+        <div class="min-w-[800px] flex-1 flex flex-col">
+
+            <!-- Шапка: Дни недели (Прилипает к верху) -->
+            <div class="grid grid-cols-[60px_repeat(7,1fr)] border-b border-jira-border sticky top-0 bg-jira-panel z-20 shadow-sm">
+                <div class="p-2 border-r border-jira-border text-center flex items-end justify-center text-[9px] text-jira-text uppercase font-mono tracking-wider">Часы</div>
+
+                <div class="p-2 border-r border-jira-border text-center flex flex-col items-center gap-1">
+                    <span class="text-[10px] uppercase text-jira-text font-semibold">Пн</span>
+                    <span class="text-lg text-jira-textBright">14</span>
+                </div>
+
+                <!-- Текущий день (Вторник 15) -->
+                <div class="p-2 border-r border-jira-border text-center flex flex-col items-center gap-1 bg-jira-accentBg/30 relative">
+                    <!-- Полоска сверху для акцента -->
+                    <div class="absolute top-0 left-0 right-0 h-0.5 bg-jira-accent"></div>
+                    <span class="text-[10px] uppercase text-jira-accent font-semibold">Вт</span>
+                    <span class="text-lg text-white font-bold w-7 h-7 flex items-center justify-center bg-jira-accent rounded-full leading-none">15</span>
+                </div>
+
+                <div class="p-2 border-r border-jira-border text-center flex flex-col items-center gap-1">
+                    <span class="text-[10px] uppercase text-jira-text font-semibold">Ср</span>
+                    <span class="text-lg text-jira-textBright">16</span>
+                </div>
+                <div class="p-2 border-r border-jira-border text-center flex flex-col items-center gap-1">
+                    <span class="text-[10px] uppercase text-jira-text font-semibold">Чт</span>
+                    <span class="text-lg text-jira-textBright">17</span>
+                </div>
+                <div class="p-2 border-r border-jira-border text-center flex flex-col items-center gap-1">
+                    <span class="text-[10px] uppercase text-jira-text font-semibold">Пт</span>
+                    <span class="text-lg text-jira-textBright">18</span>
+                </div>
+                <div class="p-2 border-r border-jira-border text-center flex flex-col items-center gap-1 bg-jira-bg/50">
+                    <span class="text-[10px] uppercase text-red-500 font-semibold">Сб</span>
+                    <span class="text-lg text-jira-textBright">19</span>
+                </div>
+                <div class="p-2 text-center flex flex-col items-center gap-1 bg-jira-bg/50">
+                    <span class="text-[10px] uppercase text-red-500 font-semibold">Вс</span>
+                    <span class="text-lg text-jira-textBright">20</span>
+                </div>
+            </div>
+
+            <!-- Тело сетки -->
+            <div class="flex-1 flex relative">
+
+                <!-- Колонка времени (Ось Y) - прилипает слева при горизонтальном скролле -->
+                <div class="w-[60px] shrink-0 border-r border-jira-border flex flex-col bg-jira-panel z-10 sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.02)]">
+                    <!-- Каждая ячейка высотой 60px (1 час = 60px) -->
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">09:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">10:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">11:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">12:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">13:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">14:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">15:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">16:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">17:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">18:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">19:00</div>
+                    <div class="h-[60px] border-b border-jira-border border-dashed opacity-70 text-[10px] text-jira-text text-right pr-2 pt-1 font-mono">20:00</div>
+                </div>
+
+                <!-- Колонки дней (сетка) -->
+                <div class="flex-1 grid grid-cols-7 relative">
+
+                    <!-- Рендерим 7 дней. Внутри генерируем горизонтальные линии -->
+                    <!-- ПН -->
+                    <div class="border-r border-jira-border relative pointer-events-none">
+                        <!-- Линии фона (12 часов) -->
+                        <div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div>
+                    </div>
+
+                    <!-- ВТ (Текущий день) -->
+                    <div class="border-r border-jira-border relative bg-jira-accentBg/5 pointer-events-auto">
+                        <div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40 pointer-events-none"></div>
+
+                        <!-- Линия ТЕКУЩЕГО ВРЕМЕНИ (Красная) -->
+                        <div class="absolute left-0 right-0 border-t-2 border-red-500 z-20 pointer-events-none" style="top: 150px;">
+                            <div class="absolute -left-1.5 -top-1.5 w-3 h-3 bg-red-500 rounded-full"></div>
+                        </div>
+
+                        <!-- ЗАПИСЬ 1: 10:00 - 13:30 (Сложное окрашивание) -->
+                        <!-- 1 час = 60px. Начало в 10:00 = 1 час от начала (09:00). Сдвиг top = 60px -->
+                        <!-- Длительность 3.5 часа. Высота = 3.5 * 60 = 210px -->
+                        <div class="absolute left-1 right-1 rounded-md bg-blue-100 dark:bg-blue-900/40 border-l-4 border-blue-500 p-2 shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow group z-10" style="top: 60px; height: 210px;">
+                            <div class="text-[10px] font-semibold text-blue-700 dark:text-blue-400 mb-0.5">10:00 - 13:30</div>
+                            <div class="text-xs text-jira-textBright font-semibold truncate group-hover:text-blue-600 transition-colors">Анастасия В.</div>
+                            <div class="text-[10px] text-jira-text truncate mt-0.5">Окрашивание + уход</div>
+                        </div>
+
+                        <!-- ЗАПИСЬ 2: 14:00 - 15:00 (Маникюр) -->
+                        <!-- Начало в 14:00 = 5 часов от начала (5 * 60 = 300px). Высота 1 час = 60px -->
+                        <div class="absolute left-1 right-1 rounded-md bg-green-100 dark:bg-green-900/40 border-l-4 border-green-500 p-1.5 shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow group z-10" style="top: 300px; height: 60px;">
+                            <div class="text-[10px] font-semibold text-green-700 dark:text-green-400">14:00 - 15:00</div>
+                            <div class="text-xs text-jira-textBright font-semibold truncate">Мария С.</div>
+                        </div>
+                    </div>
+
+                    <!-- СР, ЧТ, ПТ, СБ, ВС (Генерируем просто пустые линии фона) -->
+                    <!-- ... Скопируй блок фона для оставшихся 5 колонок ... -->
+                    <div class="border-r border-jira-border pointer-events-none"><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div></div>
+                    <div class="border-r border-jira-border pointer-events-none"><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div></div>
+                    <div class="border-r border-jira-border pointer-events-none"><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div></div>
+                    <div class="border-r border-jira-border bg-jira-bg/50 pointer-events-none"><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div></div>
+                    <div class="bg-jira-bg/50 pointer-events-none"><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div><div class="h-[60px] border-b border-jira-border border-dashed opacity-40"></div></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Не забудь вставить код модалки создания записи (booking_modal) прямо здесь перед endblock -->
+{% endblock %}

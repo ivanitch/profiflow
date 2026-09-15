@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Клиенты - ProfiFlow{% endblock %}
+
+{% block content %}
+    <!-- Хедер страницы со строкой поиска и кнопкой -->
+    <div class="px-4 md:px-8 py-4 md:py-5 shrink-0 flex flex-col gap-4 z-10">
+        <div class="flex items-center text-xs font-medium text-jira-text gap-2">
+            <span class="hover:underline cursor-pointer">Рабочая область</span> /
+            <span class="text-jira-textBright">Клиенты</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between gap-4">
+            <h1 class="text-xl md:text-2xl font-semibold text-jira-textBright">База клиентов <span class="text-jira-text text-sm font-normal ml-2">Всего: 142</span></h1>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <!-- Поиск по клиентам -->
+                <div class="relative w-full sm:w-64">
+                    <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-jira-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" placeholder="Имя, телефон или ID..." class="w-full bg-jira-bg border border-jira-border rounded-md py-1.5 pl-9 pr-3 text-sm text-jira-textBright placeholder-jira-text focus:outline-none focus:border-jira-accent transition-colors">
+                </div>
+
+                <!-- Кнопка "Новый клиент" -->
+                <button class="px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span class="hidden sm:inline">Новый клиент</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент (Таблица для ПК / Карточки для Телефонов) -->
+    <div class="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-8 pb-10">
+
+        <div class="bg-jira-panel rounded-xl border border-jira-border overflow-hidden shadow-sm">
+
+            <!-- ============================================== -->
+            <!-- 1. МОБИЛЬНЫЙ ВИД (Карточки) - скрыт на md+      -->
+            <!-- ============================================== -->
+            <div class="flex flex-col md:hidden divide-y divide-jira-border">
+
+                <!-- Мобильная карточка 1 -->
+                <div class="p-4 flex flex-col gap-3 hover:bg-jira-cardHover transition-colors cursor-pointer">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-3">
+                            <div class="avatar placeholder">
+                                <div class="bg-pink-900 text-pink-200 rounded-full w-10 h-10 text-sm ring-1 ring-jira-border"><span>АВ</span></div>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-medium text-jira-textBright">Анастасия В.</span>
+                                <span class="text-xs text-jira-text">+7 (999) 123-45-67</span>
+                            </div>
+                        </div>
+                        <span class="bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-medium">VIP</span>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div class="flex gap-4 text-xs">
+                            <div class="flex flex-col">
+                                <span class="text-jira-text">Визитов</span>
+                                <span class="text-jira-textBright font-medium">12</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-jira-text">Выручка</span>
+                                <span class="text-jira-textBright font-medium">45 000 ₽</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-jira-text">Был(а): 15 сент.</span>
+                    </div>
+                </div>
+
+                <!-- Мобильная карточка 2 -->
+                <div class="p-4 flex flex-col gap-3 hover:bg-jira-cardHover transition-colors cursor-pointer">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-3">
+                            <div class="avatar placeholder">
+                                <div class="bg-green-900 text-green-200 rounded-full w-10 h-10 text-sm ring-1 ring-jira-border"><span>МС</span></div>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-medium text-jira-textBright">Мария С.</span>
+                                <span class="text-xs text-jira-text">+7 (988) 765-43-21</span>
+                            </div>
+                        </div>
+                        <span class="bg-gray-500/15 text-gray-700 dark:text-gray-400 border border-gray-500/30 px-1.5 py-0.5 rounded text-[10px] font-medium">Обычный</span>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div class="flex gap-4 text-xs">
+                            <div class="flex flex-col">
+                                <span class="text-jira-text">Визитов</span>
+                                <span class="text-jira-textBright font-medium">2</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-jira-text">Выручка</span>
+                                <span class="text-jira-textBright font-medium">3 500 ₽</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-jira-text">Был(а): 10 авг.</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ============================================== -->
+            <!-- 2. ДЕСКТОПНЫЙ ВИД (Таблица) - виден от md+     -->
+            <!-- ============================================== -->
+            <div class="hidden md:block overflow-x-auto w-full">
+                <table class="table w-full text-sm">
+                    <!-- Шапка таблицы -->
+                    <thead class="text-jira-text uppercase text-[10px] tracking-wider border-b border-jira-border bg-jira-bg/50">
+                        <tr>
+                            <th class="font-semibold py-3 pl-6">Клиент</th>
+                            <th class="font-semibold py-3">Контакты</th>
+                            <th class="font-semibold py-3">Статус</th>
+                            <th class="font-semibold py-3 text-right">Визиты</th>
+                            <th class="font-semibold py-3 text-right">Выручка</th>
+                            <th class="font-semibold py-3 text-right">Последний визит</th>
+                            <th class="font-semibold py-3 pr-6 text-center">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-jira-textBright">
+
+                        <!-- Строка 1 -->
+                        <tr class="border-b border-jira-border hover:bg-jira-cardHover transition-colors cursor-pointer group">
+                            <td class="py-3 pl-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="avatar placeholder">
+                                        <div class="bg-pink-900 text-pink-200 rounded-full w-8 h-8 text-[10px] ring-1 ring-jira-border"><span>АВ</span></div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-medium group-hover:text-jira-accent transition-colors">Анастасия В.</span>
+                                        <span class="text-[10px] text-jira-text font-mono">ID-104</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <div class="flex flex-col">
+                                    <span>+7 (999) 123-45-67</span>
+                                    <span class="text-xs text-blue-500">@anastasia_v</span>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <span class="bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-[10px] font-medium">VIP</span>
+                            </td>
+                            <td class="py-3 text-right font-medium">12</td>
+                            <td class="py-3 text-right font-medium">45 000 ₽</td>
+                            <td class="py-3 text-right text-jira-text">15 сент. 2026</td>
+                            <td class="py-3 pr-6 text-center">
+                                <!-- Кнопка действий (три точки) -->
+                                <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-panel rounded transition-colors" onclick="event.stopPropagation();">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Строка 2 -->
+                        <tr class="border-b border-jira-border hover:bg-jira-cardHover transition-colors cursor-pointer group">
+                            <td class="py-3 pl-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="avatar placeholder">
+                                        <div class="bg-green-900 text-green-200 rounded-full w-8 h-8 text-[10px] ring-1 ring-jira-border"><span>МС</span></div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-medium group-hover:text-jira-accent transition-colors">Мария С.</span>
+                                        <span class="text-[10px] text-jira-text font-mono">ID-105</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <div class="flex flex-col">
+                                    <span>+7 (988) 765-43-21</span>
+                                    <span class="text-xs text-jira-text">Нет Telegram</span>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <span class="bg-gray-500/15 text-gray-700 dark:text-gray-400 border border-gray-500/30 px-2 py-0.5 rounded text-[10px] font-medium">Обычный</span>
+                            </td>
+                            <td class="py-3 text-right font-medium">2</td>
+                            <td class="py-3 text-right font-medium">3 500 ₽</td>
+                            <td class="py-3 text-right text-jira-text">10 авг. 2026</td>
+                            <td class="py-3 pr-6 text-center">
+                                <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-panel rounded transition-colors" onclick="event.stopPropagation();">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Пагинация -->
+            <div class="px-6 py-3 border-t border-jira-border bg-jira-bg/30 flex justify-between items-center text-xs text-jira-text">
+                <span>Показано 1-2 из 142</span>
+                <div class="flex gap-1">
+                    <button class="px-2 py-1 rounded border border-jira-border hover:bg-jira-panel transition-colors opacity-50 cursor-not-allowed">Пред.</button>
+                    <button class="px-2 py-1 rounded border border-jira-border bg-jira-panel text-jira-textBright">1</button>
+                    <button class="px-2 py-1 rounded border border-jira-border hover:bg-jira-panel transition-colors">2</button>
+                    <button class="px-2 py-1 rounded border border-jira-border hover:bg-jira-panel transition-colors">3</button>
+                    <button class="px-2 py-1 rounded border border-jira-border hover:bg-jira-panel transition-colors">След.</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
