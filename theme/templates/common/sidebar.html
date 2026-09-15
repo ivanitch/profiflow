@@ -1,6 +1,6 @@
 <!-- Sidebar -->
-<aside class="w-[260px] bg-jira-panel border-r border-jira-border flex flex-col shrink-0 overflow-y-auto">
-    <nav class="p-2 space-y-0.5 mt-2">
+<aside class="w-[260px] bg-jira-panel border-r border-jira-border flex flex-col shrink-0 overflow-y-auto overflow-x-hidden">
+    <nav class="p-2 space-y-0.5 mt-2 flex-1">
         <div class="px-3 py-2 text-xs font-semibold text-jira-text uppercase tracking-wider mb-1">Рабочая область</div>
 
         <a href="#"
@@ -47,16 +47,25 @@
             Финансы
         </a>
     </nav>
-    <div class="mt-auto p-2 border-t border-jira-border">
-        <a href="#"
-           class="px-3 py-1.5 rounded-md text-jira-text hover:bg-jira-cardHover hover:text-jira-textBright flex items-center gap-3 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            Настройки
-        </a>
+    <!-- Выпадающее меню настроек -->
+    <div class="mt-auto p-2 border-t border-jira-border w-full">
+        <div class="dropdown dropdown-top w-full">
+            <!-- Добавлен класс cursor-pointer в конец строки -->
+            <div tabindex="0" role="button" class="w-full px-3 py-1.5 rounded-md text-jira-text hover:bg-base-200 hover:text-jira-textBright flex items-center gap-3 transition-colors cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Настройки
+            </div>
+
+            <ul tabindex="0" class="dropdown-content z-[100] menu p-2 shadow-2xl bg-base-100 text-base-content border border-base-300 rounded-md w-full mb-2 gap-1 text-sm">
+                <li><a href="#" class="hover:bg-base-200 rounded-md py-1.5 transition-colors">Общие настройки</a></li>
+                <li><a href="#" class="hover:bg-base-200 rounded-md py-1.5 transition-colors">Интеграции</a></li>
+                <li class="h-px bg-base-300 my-1 w-full list-none"></li>
+                <li class="px-2 py-0.5 text-[10px] text-gray-500 uppercase font-mono tracking-wide">Версия: 1.0.4-beta</li>
+                <li class="px-2 py-0.5 text-[10px] text-gray-500 uppercase font-mono tracking-wide">Сборка: b9a7c3f</li>
+            </ul>
+        </div>
     </div>
 </aside>

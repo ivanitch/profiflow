@@ -54,10 +54,27 @@
             </svg>
         </button>
 
-        <!-- Аватарка мастера -->
-        <div class="avatar placeholder cursor-pointer">
-            <div class="bg-indigo-900 text-indigo-200 rounded-full w-7 ring ring-transparent hover:ring-jira-border ring-offset-base-100 ring-offset-2 transition-all text-xs font-semibold">
-                <span>СЕ</span>
+        <!-- Меню профиля (Аватар) -->
+        <div class="dropdown dropdown-end ml-1">
+            <div tabindex="0" role="button" class="avatar placeholder cursor-pointer">
+                <div class="bg-indigo-900 text-indigo-200 rounded-full w-8 ring ring-transparent hover:ring-jira-border ring-offset-base-100 transition-all text-xs font-semibold">
+                    <span>СЕ</span>
+                </div>
+            </div>
+
+            <!-- Заменили ul на div, убрали класс 'menu', добавили 'flex flex-col' -->
+            <div tabindex="0"
+                 class="dropdown-content z-[100] flex flex-col py-1 overflow-hidden shadow-2xl bg-base-100 text-base-content border border-base-300 rounded-md w-56 mt-3 text-sm">
+                <div class="px-4 py-2 text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold">Сергей</div>
+
+                <!-- Ссылки теперь обычные блочные элементы -->
+                <a href="#" class="px-4 py-2 hover:bg-base-200 transition-colors w-full block">Профиль</a>
+                <a href="#" class="px-4 py-2 hover:bg-base-200 transition-colors w-full block">Мой тариф</a>
+
+                <!-- Разделитель -->
+                <div class="h-px bg-base-300 my-1 w-full"></div>
+
+                <a href="#" class="px-4 py-2 hover:bg-red-500/10 text-red-500 transition-colors w-full block">Выйти</a>
             </div>
         </div>
     </div>
