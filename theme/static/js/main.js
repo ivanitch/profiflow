@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Инициализация при загрузке
   if (document.documentElement.classList.contains('dark')) {
     lightIcon.classList.remove('hidden');
-    document.documentElement.setAttribute('data-theme', 'dark'); // Говорим daisyUI включить темную
+    document.documentElement.setAttribute('data-theme', 'dark');
   } else {
     darkIcon.classList.remove('hidden');
-    document.documentElement.setAttribute('data-theme', 'light'); // Говорим daisyUI включить светлую
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 
   themeToggleBtn.addEventListener('click', function () {
