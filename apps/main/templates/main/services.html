@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Услуги и цены - ProfiFlow{% endblock %}
+
+{% block content %}
+    <!-- Хедер страницы -->
+    <div class="px-4 md:px-8 py-4 md:py-5 shrink-0 flex flex-col gap-4 z-10">
+        <div class="flex items-center text-xs font-medium text-jira-text gap-2">
+            <span class="hover:underline cursor-pointer">Рабочая область</span> /
+            <span class="text-jira-textBright">Услуги</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between gap-4">
+            <h1 class="text-xl md:text-2xl font-semibold text-jira-textBright">Услуги и прайс-лист</h1>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <div class="relative w-full sm:w-64">
+                    <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-jira-text" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" placeholder="Поиск услуги..." class="w-full bg-jira-bg border border-jira-border rounded-md py-1.5 pl-9 pr-3 text-sm text-jira-textBright placeholder-jira-text focus:outline-none focus:border-jira-accent transition-colors">
+                </div>
+
+                <!-- Кнопка "Новая услуга" вызывает модалку через label -->
+                <label for="service_modal" class="cursor-pointer px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span class="hidden sm:inline">Новая услуга</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент: Список услуг по категориям -->
+    <div class="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-8 pb-10 flex flex-col gap-6">
+
+        <!-- КАТЕГОРИЯ 1: Парикмахерский зал -->
+        <div class="bg-jira-panel rounded-xl border border-jira-border overflow-hidden shadow-sm">
+            <!-- Шапка категории -->
+            <div class="bg-jira-bg/50 px-5 py-3 border-b border-jira-border flex justify-between items-center">
+                <h3 class="font-semibold text-jira-textBright uppercase tracking-wide text-xs">Парикмахерский зал</h3>
+                <span class="text-xs text-jira-text bg-jira-panel border border-jira-border px-2 py-0.5 rounded-full">2 услуги</span>
+            </div>
+
+            <!-- Список услуг внутри категории -->
+            <div class="divide-y divide-jira-border">
+
+                <!-- Услуга 1.1 -->
+                <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-jira-cardHover transition-colors group">
+                    <div class="flex flex-col">
+                        <span class="font-medium text-jira-textBright group-hover:text-jira-accent transition-colors">Сложное окрашивание</span>
+                        <span class="text-xs text-jira-text mt-0.5">Омбре, шатуш, балаяж. Уход включен.</span>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-6 sm:gap-8 w-full sm:w-auto">
+                        <div class="flex flex-col sm:text-right">
+                            <span class="text-[10px] text-jira-text uppercase font-semibold">Длительность</span>
+                            <span class="font-medium text-jira-textBright">3 ч 30 мин</span>
+                        </div>
+                        <div class="flex flex-col sm:text-right w-20">
+                            <span class="text-[10px] text-jira-text uppercase font-semibold">Цена от</span>
+                            <span class="font-medium text-jira-textBright">8 500 ₽</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-bg rounded transition-colors" title="Редактировать">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Услуга 1.2 -->
+                <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-jira-cardHover transition-colors group">
+                    <div class="flex flex-col">
+                        <span class="font-medium text-jira-textBright group-hover:text-jira-accent transition-colors">Стрижка женская</span>
+                        <span class="text-xs text-jira-text mt-0.5">Мытье головы, стрижка, легкая укладка</span>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-6 sm:gap-8 w-full sm:w-auto">
+                        <div class="flex flex-col sm:text-right">
+                            <span class="text-[10px] text-jira-text uppercase font-semibold">Длительность</span>
+                            <span class="font-medium text-jira-textBright">1 ч</span>
+                        </div>
+                        <div class="flex flex-col sm:text-right w-20">
+                            <span class="text-[10px] text-jira-text uppercase font-semibold">Фикс. цена</span>
+                            <span class="font-medium text-jira-textBright">1 500 ₽</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-bg rounded transition-colors" title="Редактировать">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- КАТЕГОРИЯ 2: Nail-сервис -->
+        <div class="bg-jira-panel rounded-xl border border-jira-border overflow-hidden shadow-sm">
+            <div class="bg-jira-bg/50 px-5 py-3 border-b border-jira-border flex justify-between items-center">
+                <h3 class="font-semibold text-jira-textBright uppercase tracking-wide text-xs">Nail-сервис</h3>
+                <span class="text-xs text-jira-text bg-jira-panel border border-jira-border px-2 py-0.5 rounded-full">1 услуга</span>
+            </div>
+
+            <div class="divide-y divide-jira-border">
+                <!-- Услуга 2.1 -->
+                <div class="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-jira-cardHover transition-colors group">
+                    <div class="flex flex-col">
+                        <span class="font-medium text-jira-textBright group-hover:text-jira-accent transition-colors">Маникюр + снятие</span>
+                        <span class="text-xs text-jira-text mt-0.5">Аппаратный маникюр, снятие старого покрытия</span>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-6 sm:gap-8 w-full sm:w-auto">
+                        <div class="flex flex-col sm:text-right">
+                            <span class="text-[10px] text-jira-text uppercase font-semibold">Длительность</span>
+                            <span class="font-medium text-jira-textBright">1 ч 15 мин</span>
+                        </div>
+                        <div class="flex flex-col sm:text-right w-20">
+                            <span class="text-[10px] text-jira-text uppercase font-semibold">Фикс. цена</span>
+                            <span class="font-medium text-jira-textBright">1 200 ₽</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-bg rounded transition-colors" title="Редактировать">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО: ДОБАВЛЕНИЕ/РЕДАКТИРОВАНИЕ  -->
+    <!-- ========================================== -->
+    <input type="checkbox" id="service_modal" class="modal-toggle" />
+
+    <div class="modal modal-bottom sm:modal-middle" role="dialog">
+        <div class="modal-box bg-jira-panel border border-jira-border shadow-2xl p-0 overflow-hidden">
+
+            <div class="px-6 py-4 border-b border-jira-border flex justify-between items-center bg-jira-bg">
+                <h3 class="font-semibold text-lg text-jira-textBright">Новая услуга</h3>
+                <label for="service_modal" class="cursor-pointer text-jira-text hover:text-jira-textBright transition-colors p-1 rounded-md hover:bg-jira-panel">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </label>
+            </div>
+
+            <div class="p-6 flex flex-col gap-4">
+
+                <div class="form-control w-full">
+                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Категория</span></label>
+                    <select class="select select-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 leading-tight">
+                        <option disabled selected>Выберите категорию...</option>
+                        <option>Парикмахерский зал</option>
+                        <option>Nail-сервис</option>
+                        <option>Брови и ресницы</option>
+                        <option>+ Создать новую категорию</option>
+                    </select>
+                </div>
+
+                <div class="form-control w-full">
+                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Название услуги</span></label>
+                    <input type="text" placeholder="Например: Мужская стрижка" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                </div>
+
+                <div class="form-control w-full">
+                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Краткое описание (для клиента)</span></label>
+                    <textarea class="textarea textarea-bordered h-14 bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent py-2 px-3 leading-relaxed" placeholder="Что входит в услугу..."></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="form-control w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Длительность</span></label>
+                        <select class="select select-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 leading-tight">
+                            <option>30 мин</option>
+                            <option>1 ч</option>
+                            <option>1 ч 30 мин</option>
+                            <option>2 ч</option>
+                            <option>3 ч</option>
+                        </select>
+                    </div>
+                    <div class="form-control w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Цена (₽)</span></label>
+                        <div class="relative">
+                            <input type="number" placeholder="0" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3 pr-8" />
+                            <span class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-jira-text">₽</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="px-6 py-4 border-t border-jira-border bg-jira-bg flex justify-between gap-3">
+                <!-- Кнопка удаления (видна при редактировании, можно скрыть через Django if) -->
+                <button class="px-3 py-2 text-red-500 hover:bg-red-500/10 rounded-md transition-colors text-sm font-medium">
+                    Удалить
+                </button>
+
+                <div class="flex gap-3">
+                    <label for="service_modal" class="cursor-pointer px-4 py-2 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium">
+                        Отмена
+                    </label>
+                    <button class="px-4 py-2 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <label class="modal-backdrop" for="service_modal">Close</label>
+    </div>
+{% endblock %}

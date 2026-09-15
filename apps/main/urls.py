@@ -6,6 +6,7 @@ from .views import (
     client_list_page,
     appointment_page,
     calendar_page,
+    services_page,
 )
 
 app_name = 'main'
@@ -17,4 +18,5 @@ urlpatterns = [
     path('client-list/', client_list_page, name='client-list'),
     path('appointment-page/', appointment_page, name='appointment-page'),
     path('calendar-page/', calendar_page, name='calendar-page'),
+    path('services-page/', services_page, name='services-page'),
 ]
