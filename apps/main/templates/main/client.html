@@ -23,7 +23,8 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <button class="px-3 py-1.5 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium cursor-pointer">
+                <button type="button" onclick="document.getElementById('edit_client_modal').showModal()"
+                        class="px-3 py-1.5 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium">
                     Редактировать
                 </button>
                 <!-- Кнопка вызова модального окна записи -->
@@ -124,7 +125,7 @@
         </div>
     </div>
 
-<!-- ========================================== -->
+    <!-- ========================================== -->
     <!-- МОДАЛЬНОЕ ОКНО: ФОРМА СОЗДАНИЯ ЗАПИСИ      -->
     <!-- ========================================== -->
     <dialog id="booking_modal" class="modal modal-bottom sm:modal-middle">
@@ -135,7 +136,10 @@
                 <h3 class="font-semibold text-lg text-jira-textBright">Новая запись</h3>
                 <form method="dialog">
                     <button class="text-jira-text hover:text-jira-textBright transition-colors p-1 rounded-md hover:bg-jira-panel cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                     </button>
                 </form>
             </div>
@@ -144,7 +148,8 @@
             <div class="p-6 flex flex-col gap-4">
 
                 <div class="form-control w-full">
-                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Услуга</span></label>
+                    <label class="label pt-0 pb-1"><span
+                            class="label-text text-xs font-semibold text-jira-text uppercase">Услуга</span></label>
                     <select class="select select-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 leading-tight">
                         <option disabled selected>Выберите услугу...</option>
                         <option>Сложное окрашивание</option>
@@ -154,7 +159,8 @@
                 </div>
 
                 <div class="form-control w-full">
-                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Мастер</span></label>
+                    <label class="label pt-0 pb-1"><span
+                            class="label-text text-xs font-semibold text-jira-text uppercase">Мастер</span></label>
                     <select class="select select-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 leading-tight">
                         <option disabled selected>Выберите мастера...</option>
                         <option>Екатерина Л.</option>
@@ -164,18 +170,25 @@
 
                 <div class="flex gap-4">
                     <div class="form-control w-1/2">
-                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Дата</span></label>
-                        <input type="date" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                        <label class="label pt-0 pb-1"><span
+                                class="label-text text-xs font-semibold text-jira-text uppercase">Дата</span></label>
+                        <input type="date"
+                               class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3"/>
                     </div>
                     <div class="form-control w-1/2">
-                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Время</span></label>
-                        <input type="time" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                        <label class="label pt-0 pb-1"><span
+                                class="label-text text-xs font-semibold text-jira-text uppercase">Время</span></label>
+                        <input type="time"
+                               class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3"/>
                     </div>
                 </div>
 
                 <div class="form-control w-full">
-                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Комментарий</span></label>
-                    <textarea class="textarea textarea-bordered h-20 bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent py-2 px-3 leading-relaxed" placeholder="Пожелания клиента, формулы окрашивания..."></textarea>
+                    <label class="label pt-0 pb-1"><span
+                            class="label-text text-xs font-semibold text-jira-text uppercase">Комментарий</span></label>
+                    <textarea
+                            class="textarea textarea-bordered h-20 bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent py-2 px-3 leading-relaxed"
+                            placeholder="Пожелания клиента, формулы окрашивания..."></textarea>
                 </div>
 
             </div>
@@ -189,6 +202,82 @@
                 </form>
                 <button class="px-4 py-2 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none">
                     Создать запись
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Клик вне окна закрывает модалку -->
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- ========================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО: РЕДАКТИРОВАНИЕ КЛИЕНТА     -->
+    <!-- ========================================== -->
+    <dialog id="edit_client_modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box bg-jira-panel border border-jira-border shadow-2xl p-0 overflow-hidden">
+
+            <!-- Шапка модалки -->
+            <div class="px-6 py-4 border-b border-jira-border flex justify-between items-center bg-jira-bg">
+                <h3 class="font-semibold text-lg text-jira-textBright">Редактирование профиля</h3>
+                <form method="dialog">
+                    <button class="text-jira-text hover:text-jira-textBright transition-colors p-1 rounded-md hover:bg-jira-panel">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Тело формы -->
+            <div class="p-6 flex flex-col gap-4">
+
+                <!-- Поле: Имя (на всю ширину) -->
+                <div class="form-control w-full">
+                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Имя и Фамилия</span></label>
+                    <input type="text" value="Анастасия В." class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                </div>
+
+                <!-- Блок Контакты: Телефон и Telegram (2 колонки на ПК, 1 на телефоне) -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="form-control w-full sm:w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Телефон</span></label>
+                        <input type="tel" value="+7 (999) 123-45-67" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                    </div>
+                    <div class="form-control w-full sm:w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Telegram</span></label>
+                        <input type="text" value="@anastasia_v" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                    </div>
+                </div>
+
+                <!-- Блок Доп. инфо: День рождения и Статус -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="form-control w-full sm:w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">День рождения</span></label>
+                        <input type="date" value="2000-04-15" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                    </div>
+                    <div class="form-control w-full sm:w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Статус</span></label>
+                        <select class="select select-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 leading-tight">
+                            <option>Новый клиент</option>
+                            <option selected>Постоянный</option>
+                            <option>В черном списке</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Подвал с кнопками -->
+            <div class="px-6 py-4 border-t border-jira-border bg-jira-bg flex justify-end gap-3">
+                <form method="dialog">
+                    <button class="px-4 py-2 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium">
+                        Отмена
+                    </button>
+                </form>
+                <!-- Первичная кнопка сохранения -->
+                <button class="px-4 py-2 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none">
+                    Сохранить изменения
                 </button>
             </div>
 
