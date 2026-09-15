@@ -14,3 +14,6 @@ def source_page(request):
 
 def client_page(request):
     return render(request, 'main/client.html')
+
+def client_list_page(request):
+    return render(request, 'main/client_list.html')
