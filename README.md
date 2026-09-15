@@ -52,4 +52,5 @@ make migrate
 ## Дополнительно
 
 - [Шпаргалка по командам Make](docs/make.md)
+- [Шпаргалка: Tailwind + Django (uv)](docs/tailwind.md)
 
