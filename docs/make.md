@@ -1,7 +1,8 @@
 # Шпаргалка по командам `Make`
 
 ```bash
-make                            # Вызов `make help` - просмотр всех команд
+make                            # Вызов `make help`
+make help                       # Просмотр всех команд
 
 ## - Containers - ##
 make build                      # Собрать/Пересобрать образы
@@ -22,7 +23,8 @@ make superuser                  # Новый супер-пользователь
 ## - Workflow - ##
 # Зайти внутрь контейнера с Django
 make shell
-# -> команды внутри контейнера с Django
+
+# команды внутри контейнера с Django
 python manage.py shell          # Запустить интерактивную оболочку Django
 python manage.py makemigrations # Создать миграции БД
 python manage.py  migrate       # Применить миграции БД

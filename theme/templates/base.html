@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static tailwind_tags %}
+    {% tailwind_css %}
+</head>
+
+<body class="bg-gray-50 text-black font-serif leading-normal tracking-normal">
+
+    {% include "common/header.html" %}
+
+    <main class="container mx-auto px-4 py-8 flex-1 w-full">
+        <div class="toast toast-top toast-end">
+            <div class="alert alert-info">
+                <span>Hello from daisyUi 👋</span>
+            </div>
+        </div>
+
+        {% include "common/messages.html" %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "common/footer.html" %}
+</body>
+</html>

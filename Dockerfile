@@ -8,9 +8,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_PROJECT_ENVIRONMENT="/opt/venv" \
     PATH="/opt/venv/bin:$PATH"
 
-# Системные зависимости (gcc нужен для сборки некоторых пакетов, libpq-dev - для PostgreSQL)
+# Системные зависимости (gcc, libpq-dev, плюс nodejs и npm для Tailwind)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev gcc \
+    libpq-dev gcc nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Ставим uv через pip (надежнее, чем тянуть образ с ghcr.io)

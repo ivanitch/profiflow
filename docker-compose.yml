@@ -52,6 +52,25 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+  # Tailwind Watcher
+  tailwind:
+    build:
+      context: .
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=5432
+    # Команда запускает процесс наблюдения и компиляции CSS
+    command: python manage.py tailwind start
+    depends_on:
+      - web
   # Redis
   redis:
     image: redis:8-alpine
