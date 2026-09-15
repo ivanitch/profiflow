@@ -22,13 +22,21 @@
 
     {% include 'common/header.html' %}
 
-    <div class="flex flex-1 overflow-hidden">
-        {% include 'common/sidebar.html' %}
+    <div class="flex flex-1 overflow-hidden relative w-full">
+        <div class="drawer lg:drawer-open h-full w-full">
+            <input id="mobile-sidebar" type="checkbox" class="drawer-toggle" />
 
-        <main class="flex-1 flex flex-col overflow-hidden bg-jira-bg">
-            {% block content %}
-            {% endblock %}
-        </main>
+            <main class="drawer-content flex flex-col h-full overflow-hidden bg-jira-bg w-full max-w-full">
+                {% block content %}
+                {% endblock %}
+            </main>
+
+            <!-- ВАЖНО: Добавлен класс h-full к обертке сайдбара -->
+            <div class="drawer-side z-[100] h-full">
+                <label for="mobile-sidebar" aria-label="close sidebar" class="drawer-overlay border-none"></label>
+                {% include 'common/sidebar.html' %}
+            </div>
+        </div>
     </div>
 
     <!-- Общие скрипты проекта -->

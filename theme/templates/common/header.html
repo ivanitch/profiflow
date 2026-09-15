@@ -1,13 +1,17 @@
-<!-- Header / Navbar -->
-<header class="h-14 bg-jira-bg border-b border-jira-border flex items-center justify-between px-4 shrink-0 z-20">
-    <div class="flex items-center gap-6">
+<header class="h-14 bg-jira-bg border-b border-jira-border flex items-center justify-between px-3 md:px-4 shrink-0 z-20">
+
+    <div class="flex items-center gap-2 md:gap-6">
+        <!-- Бургер-меню (видно только до lg экрана) -->
+        <label for="mobile-sidebar" class="lg:hidden p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-panel rounded-md cursor-pointer transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </label>
+
         <!-- Логотип -->
-        <a href="/"
-           class="flex items-center gap-2 font-semibold text-jira-textBright text-lg tracking-wide hover:opacity-80 transition-opacity">
-            <span class="text-blue-500">🦋</span> ProfiFlow
+        <a href="/" class="flex items-center gap-2 font-semibold text-jira-textBright text-lg tracking-wide hover:opacity-80 transition-opacity">
+            <span class="text-blue-500">🦋</span> <span class="hidden sm:inline">ProfiFlow</span>
         </a>
 
-        <!-- Поиск -->
+        <!-- Поиск (без изменений) -->
         <div class="relative hidden md:block">
             <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
                 <svg class="w-4 h-4 text-jira-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,12 +25,12 @@
     </div>
 
     <div class="flex items-center gap-4">
-        <!-- Кнопка создания записи -->
-        <button class="px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5">
+        <!-- Кнопка создания записи: прячем текст "Создать" на мобильных (hidden sm:inline) -->
+        <button class="px-2 sm:px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
-            Создать
+            <span class="hidden sm:inline">Создать</span>
         </button>
 
         <div class="h-5 w-px bg-jira-border"></div>
