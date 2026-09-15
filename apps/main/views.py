@@ -25,3 +25,6 @@ def appointment_page(request):
 
 def calendar_page(request):
     return render(request, 'main/calendar.html')
+
+def services_page(request):
+    return render(request, 'main/services.html')
