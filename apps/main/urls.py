@@ -4,6 +4,7 @@ from .views import (
     home_page,
     client_page,
     client_list_page,
+    appointment_page,
 )
 
 app_name = 'main'
@@ -13,4 +14,5 @@ urlpatterns = [
     path('source-page/', source_page, name='source-page'),
     path('client-page/', client_page, name='client-page'),
     path('client-list/', client_list_page, name='client-list'),
+    path('appointment-page/', appointment_page, name='appointment-page'),
 ]
