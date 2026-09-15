@@ -22,3 +22,6 @@ def client_list_page(request):
 # Appointment
 def appointment_page(request):
     return render(request, 'main/appointment.html')
+
+def calendar_page(request):
+    return render(request, 'main/calendar.html')
