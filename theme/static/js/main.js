@@ -3,12 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const darkIcon = document.getElementById('theme-toggle-dark-icon');
   const lightIcon = document.getElementById('theme-toggle-light-icon');
 
-  if (!themeToggleBtn) return; // Защита, если хедера нет на странице
+  if (!themeToggleBtn) return;
 
+  // Инициализация при загрузке
   if (document.documentElement.classList.contains('dark')) {
     lightIcon.classList.remove('hidden');
+    document.documentElement.setAttribute('data-theme', 'dark'); // Говорим daisyUI включить темную
   } else {
     darkIcon.classList.remove('hidden');
+    document.documentElement.setAttribute('data-theme', 'light'); // Говорим daisyUI включить светлую
   }
 
   themeToggleBtn.addEventListener('click', function () {
@@ -16,10 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     lightIcon.classList.toggle('hidden');
 
     if (document.documentElement.classList.contains('dark')) {
+      // Переход в светлую
       document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
     } else {
+      // Переход в темную
       document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
     }
   });

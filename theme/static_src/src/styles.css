@@ -5,8 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Оставляем переменные глобальными, без @layer */
-:root {
+/* Привязываем жестко к тегу html */
+html {
     --jira-bg: #ffffff;
     --jira-panel: #f4f5f7;
     --jira-card: #ffffff;
@@ -20,7 +20,7 @@
     --jira-accent-bg: #e9f2ff;
 }
 
-.dark {
+html.dark {
     --jira-bg: #1d2125;
     --jira-panel: #22272b;
     --jira-card: #2c333a;
@@ -33,6 +33,5 @@
     --jira-accent: #579dff;
     --jira-accent-bg: #1c2b41;
 }
-
 
 @source "../../../**/*.{html,py,js}";
