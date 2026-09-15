@@ -1,31 +1,81 @@
-<header class="bg-slate-900 text-white">
-    <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <a href="{% url 'main:home' %}" class="text-xl font-semibold tracking-tight">{{ APP_NAME }}</a>
-        <div class="flex items-center gap-5 text-sm">
-            <a href="{% url 'main:home' %}" class="hover:text-sky-400">Главная</a>
-            <a href="#" class="hover:text-sky-400">Клиенты</a>
-            <a href="#" class="hover:text-sky-400">Сообщения</a>
-            <a href="#" class="hover:text-sky-400">Рассылки</a>
-            {% if user.is_authenticated %}
-                <a href="#" class="hover:text-sky-400">Мои записи</a>
-            {% endif %}
+<!-- Header / Navbar -->
+<header class="h-14 bg-jira-bg border-b border-jira-border flex items-center justify-between px-4 shrink-0 z-20">
+    <div class="flex items-center gap-6">
+        <!-- Логотип -->
+        <a href="/"
+           class="flex items-center gap-2 font-semibold text-jira-textBright text-lg tracking-wide hover:opacity-80 transition-opacity">
+            <span class="text-blue-500">🦋</span> ProfiFlow
+        </a>
 
-{#            {% if is_manager %}#}
-{#                <a href="{% url 'users:user_list' %}" class="hover:text-sky-400">Пользователи</a>#}
-{#            {% endif %}#}
-{#            {% if user.is_staff %}#}
-{#                <a href="{% url 'admin:index' %}" class="hover:text-sky-400">Админка</a>#}
-{#            {% endif %}#}
-{#            {% if user.is_authenticated %}#}
-{#                <span class="text-slate-400">{{ user.username }}</span>#}
-{#                <form method="post" action="{% url 'users:logout' %}" class="inline">#}
-{#                    {% csrf_token %}#}
-{#                    <button type="submit" class="hover:text-sky-400">Выйти</button>#}
-{#                </form>#}
-{#            {% else %}#}
-{#                <a href="{% url 'users:login' %}" class="hover:text-sky-400">Войти</a>#}
-{#                <a href="{% url 'users:register' %}" class="hover:text-sky-400">Регистрация</a>#}
-{#            {% endif %}#}
+        <!-- Поиск -->
+        <div class="relative hidden md:block">
+            <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                <svg class="w-4 h-4 text-jira-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <input type="text" placeholder="Поиск клиента, услуги..."
+                   class="w-72 bg-jira-panel border border-jira-border rounded-md py-1.5 pl-9 pr-3 text-sm text-jira-textBright placeholder-jira-text focus:outline-none focus:border-jira-accent focus:bg-jira-bg transition-colors">
         </div>
-    </nav>
+    </div>
+
+    <div class="flex items-center gap-4">
+        <!-- Кнопка создания записи -->
+        <button class="px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Создать
+        </button>
+
+        <div class="h-5 w-px bg-jira-border"></div>
+
+        <!-- Кнопка смены темы -->
+        <button id="theme-toggle"
+                class="text-jira-text hover:text-jira-textBright transition-colors p-1 rounded-md hover:bg-jira-panel">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+        </button>
+
+        <!-- Уведомления -->
+        <button class="text-jira-text hover:text-jira-textBright transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+        </button>
+
+        <!-- Меню профиля (Аватар) -->
+        <div class="dropdown dropdown-end ml-1">
+            <div tabindex="0" role="button" class="avatar placeholder cursor-pointer">
+                <div class="bg-indigo-900 text-indigo-200 rounded-full w-8 ring ring-transparent hover:ring-jira-border ring-offset-base-100 transition-all text-xs font-semibold">
+                    <span>СЕ</span>
+                </div>
+            </div>
+
+            <!-- Заменили ul на div, убрали класс 'menu', добавили 'flex flex-col' -->
+            <div tabindex="0"
+                 class="dropdown-content z-[100] flex flex-col py-1 overflow-hidden shadow-2xl bg-base-100 text-base-content border border-base-300 rounded-md w-56 mt-3 text-sm">
+                <div class="px-4 py-2 text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold">Сергей</div>
+
+                <!-- Ссылки теперь обычные блочные элементы -->
+                <a href="#" class="px-4 py-2 hover:bg-base-200 transition-colors w-full block">Профиль</a>
+                <a href="#" class="px-4 py-2 hover:bg-base-200 transition-colors w-full block">Мой тариф</a>
+
+                <!-- Разделитель -->
+                <div class="h-px bg-base-300 my-1 w-full"></div>
+
+                <a href="#" class="px-4 py-2 hover:bg-red-500/10 text-red-500 transition-colors w-full block">Выйти</a>
+            </div>
+        </div>
+    </div>
 </header>

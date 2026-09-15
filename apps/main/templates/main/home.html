@@ -3,6 +3,287 @@
 {% block title %}{{ APP_NAME }}{% endblock %}
 
 {% block content %}
+    <!-- Хедер доски -->
+    <div class="px-8 py-5 shrink-0 flex flex-col gap-4">
+        <div class="flex items-center text-xs font-medium text-jira-text gap-2">
+            <span class="hover:underline cursor-pointer">Проекты</span> /
+            <span class="hover:underline cursor-pointer">Салон "Beauty"</span>
+        </div>
 
+        <div class="flex items-center justify-between">
+            <h1 class="text-xl font-semibold text-jira-textBright">Записи на сегодня</h1>
+            <div class="flex items-center gap-2">
+                <button class="px-3 py-1.5 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium">
+                    Фильтры
+                </button>
+                <button class="px-3 py-1.5 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium">
+                    Мастера
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Зона колонок -->
+    <div class="flex-1 overflow-x-auto overflow-y-hidden px-8 pb-4 flex gap-4 items-start h-full">
+
+        <!-- 1. Колонка: Ожидают -->
+        <div class="w-[320px] shrink-0 flex flex-col max-h-full">
+            <div class="flex items-center gap-2 px-1 pb-3 text-xs font-semibold text-jira-text uppercase tracking-wide sticky top-0 bg-jira-bg z-10">
+                Ожидают <span
+                    class="bg-jira-panel border border-jira-border text-jira-textBright px-1.5 py-0.5 rounded text-[10px]">2</span>
+            </div>
+
+            <div class="flex flex-col gap-2 overflow-y-auto pr-1 pb-2">
+
+                <!-- Карточка 1.1 -->
+                <div class="bg-jira-card border border-jira-border rounded-lg p-3 hover:bg-jira-cardHover transition-colors cursor-pointer group shadow-sm flex flex-col gap-3">
+                    <div class="flex justify-between items-start">
+                        <span class="font-medium text-jira-textBright hover:underline hover:text-jira-accent">Анастасия В.</span>
+
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button"
+                                 class="px-2 py-0.5 text-xs font-medium bg-transparent border border-jira-border text-jira-textBright rounded hover:bg-jira-panel flex items-center gap-1 transition-colors">
+                                Ожидает
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <ul tabindex="0"
+                                class="dropdown-content z-[100] menu p-1.5 shadow-xl bg-base-100 text-base-content border border-base-300 rounded-md w-52 mt-1 gap-0.5 text-sm">
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-gray-400 rounded-sm"></span> Ожидает
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span> В кресле
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-green-500 rounded-sm"></span> Завершена
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-jira-text leading-relaxed">Сложное окрашивание + уход</p>
+                        <div class="mt-2 text-xs bg-jira-panel inline-block px-1.5 py-0.5 rounded text-jira-text border border-jira-border font-mono">
+                            ID-104
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="flex items-center gap-2 text-xs text-jira-text font-medium">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            10:00 - 13:30
+                        </div>
+                        <div class="avatar placeholder">
+                            <div class="bg-pink-900 text-pink-200 rounded-full w-6 h-6 text-[10px] ring-1 ring-jira-border">
+                                <span>АВ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 1.2 -->
+                <div class="bg-jira-card border border-jira-border rounded-lg p-3 hover:bg-jira-cardHover transition-colors cursor-pointer group shadow-sm flex flex-col gap-3">
+                    <div class="flex justify-between items-start">
+                        <span class="font-medium text-jira-textBright hover:underline hover:text-jira-accent">Мария С.</span>
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button"
+                                 class="px-2 py-0.5 text-xs font-medium bg-transparent border border-jira-border text-jira-textBright rounded hover:bg-jira-panel flex items-center gap-1 transition-colors">
+                                Ожидает
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <ul tabindex="0"
+                                class="dropdown-content z-[100] menu p-1.5 shadow-xl bg-base-100 text-base-content border border-base-300 rounded-md w-52 mt-1 gap-0.5 text-sm">
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-gray-400 rounded-sm"></span> Ожидает
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span> В кресле
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-green-500 rounded-sm"></span> Завершена
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-jira-text leading-relaxed">Маникюр + снятие</p>
+                        <div class="mt-2 text-xs bg-jira-panel inline-block px-1.5 py-0.5 rounded text-jira-text border border-jira-border font-mono">
+                            ID-105
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="flex items-center gap-2 text-xs text-jira-text font-medium">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            14:00 - 15:00
+                        </div>
+                        <div class="avatar placeholder">
+                            <div class="bg-green-900 text-green-200 rounded-full w-6 h-6 text-[10px] ring-1 ring-jira-border">
+                                <span>МС</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="mt-1 p-2 w-full text-left text-xs font-medium text-jira-text hover:bg-jira-panel hover:text-jira-textBright rounded-md transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Создать
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. Колонка: В работе -->
+        <div class="w-[320px] shrink-0 flex flex-col max-h-full">
+            <div class="flex items-center gap-2 px-1 pb-3 text-xs font-semibold text-jira-text uppercase tracking-wide sticky top-0 bg-jira-bg z-10">
+                В кресле <span
+                    class="bg-jira-panel border border-jira-border text-jira-textBright px-1.5 py-0.5 rounded text-[10px]">1</span>
+            </div>
+
+            <div class="flex flex-col gap-2 overflow-y-auto pr-1 pb-2">
+                <!-- Активная карточка с синим акцентом -->
+                <div class="bg-jira-card border border-blue-200 dark:border-blue-900 rounded-lg p-3 hover:bg-jira-cardHover transition-colors cursor-pointer group shadow-sm flex flex-col gap-3 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-blue-500"></div>
+
+                    <div class="flex justify-between items-start">
+                        <span class="font-medium text-jira-textBright hover:underline hover:text-jira-accent">Екатерина Л.</span>
+
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button"
+                                 class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-600 dark:text-white dark:border-blue-500 rounded hover:bg-blue-200 dark:hover:bg-blue-700 flex items-center gap-1 transition-colors shadow-sm">
+                                В работе
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                            <ul tabindex="0"
+                                class="dropdown-content z-[100] menu p-1.5 shadow-xl bg-base-100 text-base-content border border-base-300 rounded-md w-56 mt-1 gap-0.5 text-sm">
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-gray-400 rounded-sm"></span> К выполнению
+                                    </a>
+                                </li>
+                                <li>
+                                    <!-- Активный пункт с универсальной полупрозрачной заливкой -->
+                                    <a class="px-2 py-1.5 bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 rounded-sm flex items-center gap-2 border-l-2 border-blue-500 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span> В работе
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="px-2 py-1.5 hover:bg-base-200 rounded-sm flex items-center gap-2 transition-colors">
+                                        <span class="w-2.5 h-2.5 bg-green-500 rounded-sm"></span> Готово
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-jira-text leading-relaxed">Коррекция бровей + окрашивание</p>
+                        <div class="mt-2 text-xs bg-jira-panel inline-block px-1.5 py-0.5 rounded text-jira-text border border-jira-border font-mono">
+                            ID-102
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="flex items-center gap-2 text-xs text-blue-500 dark:text-blue-400 font-medium">
+                            <svg class="w-3.5 h-3.5 animate-pulse" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            09:00 - 10:30
+                        </div>
+                        <div class="avatar placeholder">
+                            <div class="bg-yellow-900 text-yellow-200 rounded-full w-6 h-6 text-[10px] ring-1 ring-jira-border">
+                                <span>ЕЛ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="mt-1 p-2 w-full text-left text-xs font-medium text-jira-text hover:bg-jira-panel hover:text-jira-textBright rounded-md transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Создать
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Колонка: Завершены -->
+        <div class="w-[320px] shrink-0 flex flex-col max-h-full">
+            <div class="flex items-center gap-2 px-1 pb-3 text-xs font-semibold text-jira-text uppercase tracking-wide sticky top-0 bg-jira-bg z-10">
+                Завершены <span
+                    class="bg-jira-panel border border-jira-border text-jira-textBright px-1.5 py-0.5 rounded text-[10px]">1</span>
+            </div>
+
+            <div class="flex flex-col gap-2 overflow-y-auto pr-1 pb-2">
+                <!-- Завершенная карточка -->
+                <div class="bg-jira-card border border-jira-border rounded-lg p-3 hover:bg-jira-cardHover transition-colors cursor-pointer group shadow-sm flex flex-col gap-3 opacity-75 hover:opacity-100">
+                    <div class="flex justify-between items-start">
+                        <span class="font-medium text-jira-textBright line-through decoration-jira-text">Ольга П.</span>
+
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button"
+                                 class="px-2 py-0.5 text-xs font-medium bg-green-500/15 text-green-800 border border-green-500/30 dark:text-green-400 dark:border-green-500/30 rounded hover:bg-green-500/25 flex items-center gap-1 transition-colors">
+                                Готово
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-jira-text leading-relaxed">Стрижка женская</p>
+                        <div class="mt-2 text-xs bg-jira-panel inline-block px-1.5 py-0.5 rounded text-jira-text border border-jira-border font-mono">
+                            ID-101
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="flex items-center gap-2 text-xs text-jira-text font-medium">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Завершено
+                        </div>
+                        <div class="avatar placeholder">
+                            <div class="bg-yellow-900 text-yellow-200 rounded-full w-6 h-6 text-[10px] ring-1 ring-jira-border">
+                                <span>КЛ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

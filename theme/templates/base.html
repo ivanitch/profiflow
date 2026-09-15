@@ -1,30 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" class="dark">
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     {% load static tailwind_tags %}
     {% tailwind_css %}
 </head>
 
-<body class="bg-gray-50 text-black font-serif leading-normal tracking-normal">
+<body class="bg-jira-bg text-jira-text font-sans text-sm h-screen flex flex-col overflow-hidden antialiased transition-colors duration-200">
 
-    {% include "common/header.html" %}
+    {% include 'common/header.html' %}
 
-    <main class="container mx-auto px-4 py-8 flex-1 w-full">
-        <div class="toast toast-top toast-end">
-            <div class="alert alert-info">
-                <span>Hello from daisyUi 👋</span>
-            </div>
-        </div>
+    <div class="flex flex-1 overflow-hidden">
+        {% include 'common/sidebar.html' %}
 
-        {% include "common/messages.html" %}
+        <main class="flex-1 flex flex-col overflow-hidden bg-jira-bg">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
 
-        {% block content %}{% endblock %}
-    </main>
-
-    {% include "common/footer.html" %}
+    <!-- Общие скрипты проекта -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

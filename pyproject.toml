@@ -1,6 +1,6 @@
 [project]
 name = "profiflow"
-version = "0.6.0"
+version = "0.7.0"
 description = "Сервис онлайн-записи для бьюти-мастеров и студий 🦋"
 readme = "README.md"
 requires-python = ">=3.12"
