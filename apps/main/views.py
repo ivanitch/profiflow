@@ -8,23 +8,3 @@ def home_page(request):
     }
 
     return render(request, 'main/home.html', context)
-
-def source_page(request):
-    return render(request, 'main/source.html')
-
-def client_page(request):
-    return render(request, 'main/client.html')
-
-def client_list_page(request):
-    return render(request, 'main/client_list.html')
-
-
-# Appointment
-def appointment_page(request):
-    return render(request, 'main/appointment.html')
-
-def calendar_page(request):
-    return render(request, 'main/calendar.html')
-
-def services_page(request):
-    return render(request, 'main/services.html')

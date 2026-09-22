@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "tailwind",
     "debug_toolbar",
     'apps.main.apps.MainConfig',
+    'apps.demo.apps.DemoConfig',
 ]
 
 MIDDLEWARE = [
