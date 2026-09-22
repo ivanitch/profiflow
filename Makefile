@@ -1,5 +1,5 @@
 # Variables
-DC = docker compose
+DC = UID=$$(id -u) GID=$$(id -g) docker compose
 EXEC = $(DC) exec web
 LOGS = $(DC) logs
 
@@ -7,7 +7,7 @@ LOGS = $(DC) logs
 .DEFAULT_GOAL := help
 
 # PHONY targets
-.PHONY: build up down destroy restart ps logs logs-web shell db-shell migrate makemigrations superuser collectstatic help
+.PHONY: build up down destroy restart ps logs logs-web shell db-shell migrate makemigrations superuser collectstatic startapp help
 
 build:
 	$(DC) build
@@ -52,6 +52,13 @@ makemigrations:
 superuser:
 	$(EXEC) python manage.py createsuperuser
 
+startapp:
+	@if [ -z "$(name)" ]; then \
+		echo "Usage: make startapp name=<app_name>"; \
+		exit 1; \
+	fi
+	$(EXEC) python manage.py startapp $(name) apps/$(name)
+
 collectstatic:
 	$(EXEC) python manage.py collectstatic --noinput
 
@@ -70,4 +77,5 @@ help:
 	@echo "  make migrate         - Apply Django migrations"
 	@echo "  make makemigrations  - Create new Django migrations"
 	@echo "  make superuser       - Create Django superuser"
+	@echo "  make startapp name=X - Create new Django app in apps/ directory (example: make startapp name=demo)"
 	@echo "  make collectstatic   - Collect static files for Nginx"
