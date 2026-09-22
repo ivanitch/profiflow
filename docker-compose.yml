@@ -33,6 +33,7 @@ services:
     build:
       context: .
     restart: unless-stopped
+    user: "${UID}:${GID}"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
