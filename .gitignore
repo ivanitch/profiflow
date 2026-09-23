@@ -87,6 +87,6 @@ postgres_data/
 redis_data/
 
 # ========================
-# T_Dev
+# Dev, notes, draft (Local workspace)
 # ========================
-/main.py
+/.local/

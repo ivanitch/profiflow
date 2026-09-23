@@ -1,6 +1,10 @@
-<p align="center"><a href="https://profiflow.pro" target="_blank">
-    <img src="docs/img/profiflow.jpeg" alt="ProfiFlow Logo">
-</a></p>
+[//]: # (<p align="center"><a href="https://profiflow.pro" target="_blank">)
+
+[//]: # (    <img src="docs/img/profiflow.jpeg" alt="ProfiFlow Logo">)
+
+[//]: # (</a></p>)
+
+# Profi Flow
 
 Cервис онлайн-записи для бьюти-мастеров и студий.
 
