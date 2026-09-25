@@ -18,6 +18,11 @@ RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 
+# Создаем пользователя без прав root и папки для статики/медиа
+RUN addgroup --system djangogroup && adduser --system --ingroup djangogroup djangouser \
+    && mkdir -p /app/staticfiles /app/media \
+    && chown -R djangouser:djangogroup /app
+
 # Сначала копируем только файлы зависимостей
 COPY pyproject.toml uv.lock ./
 

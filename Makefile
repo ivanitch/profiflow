@@ -19,7 +19,17 @@ down:
 	$(DC) down
 
 destroy:
-	$(DC) down -v
+	@if [ "$(ENVIRONMENT)" = "production" ] || [ "$$ENV" = "production" ]; then \
+		echo "Ошибка! Команда `destroy` заблокирована в production окружении."; \
+		exit 1; \
+	fi
+	@echo "Внимание! Это действие удалит все контейнеры и ТОМА (включая базу данных)."
+	@read -p "Вы уверены, что хотите продолжить? [y/N] " ans; \
+	if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then \
+		$(DC) down -v; \
+	else \
+		echo "Отменено."; \
+	fi
 
 restart:
 	$(DC) restart
