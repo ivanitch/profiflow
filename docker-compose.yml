@@ -45,6 +45,7 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - REDIS_URL=redis://redis:6379/0
+      - npm_config_cache=/tmp/.npm-cache
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       db:
@@ -66,6 +67,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=db
       - DB_PORT=5432
+      - npm_config_cache=/tmp/.npm-cache
     # Команда запускает процесс наблюдения и компиляции CSS
     command: python manage.py tailwind start
     depends_on:
