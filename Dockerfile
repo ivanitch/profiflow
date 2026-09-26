@@ -26,5 +26,7 @@ COPY . .
 
 RUN chown -R djangouser:djangogroup /app
 
+ENV HOME=/app
+
 USER djangouser
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--worker-tmp-dir", "/dev/shm", "config.wsgi:production"]
