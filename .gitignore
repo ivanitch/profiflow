@@ -90,3 +90,11 @@ redis_data/
 # Dev, notes, draft (Local workspace)
 # ========================
 /.local/
+
+# ========================
+# Бэкапы базы данных
+# ========================
+/backups/*
+!/backups/.gitkeep
+*.dump
+*.sql
