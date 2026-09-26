@@ -8,6 +8,10 @@ load_dotenv(dotenv_path=BASE_DIR / '.env', override=True)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1')
+
+ALLOWED_HOSTS = ["*"] if DEBUG else os.getenv("ALLOWED_HOSTS", "").split(",")
+
 TAILWIND_APP_NAME = "theme"
 
 INTERNAL_IPS = [
