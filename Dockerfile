@@ -15,18 +15,22 @@ RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 
-RUN addgroup --system djangogroup && adduser --system --ingroup djangogroup djangouser \
-    && mkdir -p /app/staticfiles /app/media \
-    && chown -R djangouser:djangogroup /app
+# Создаем группу, пользователя и явно создаем домашнюю директорию для Gunicorn
+RUN addgroup --system djangogroup && \
+    adduser --system --ingroup djangogroup djangouser && \
+    mkdir -p /app/staticfiles /app/media /home/djangouser && \
+    chown -R djangouser:djangogroup /app /home/djangouser
 
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 COPY . .
 
-RUN chown -R djangouser:djangogroup /app
+# Применяем права финально после копирования всего кода
+RUN chown -R djangouser:djangogroup /app /home/djangouser
 
-ENV HOME=/tmp
+# Явно задаем домашнюю директорию на папку, к которой у пользователя 100% есть доступ
+ENV HOME=/home/djangouser
 
 USER djangouser
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--worker-tmp-dir", "/dev/shm", "config.wsgi:production"]
