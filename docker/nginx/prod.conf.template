@@ -1,20 +1,8 @@
-# Динамический резолв через встроенный DNS Docker.
-# Без этого после пересоздания web nginx стучится на старый IP → 502.
 resolver 127.0.0.11 valid=10s ipv6=off;
 
-# Отбрасываем запросы с чужим Host (сканеры, заход по IP)
-server {
-    listen 80 default_server;
-    listen 443 ssl default_server;
-    server_name _;
-    ssl_reject_handshake on;
-    return 444;
-}
-
-# HTTP: ACME-проверки + редирект на HTTPS
 server {
     listen 80;
-    server_name profiflow.pro www.profiflow.pro;
+    server_name ${DOMAIN} ${WWW_DOMAIN};
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
@@ -25,15 +13,15 @@ server {
     }
 }
 
-# HTTPS
 server {
     listen 443 ssl;
     http2 on;
-    server_name profiflow.pro www.profiflow.pro;
+    server_name ${DOMAIN} ${WWW_DOMAIN};
     server_tokens off;
 
-    ssl_certificate     /etc/letsencrypt/live/profiflow.pro/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/profiflow.pro/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 1d;
@@ -44,8 +32,8 @@ server {
     gzip_min_length 1024;
     gzip_types text/css application/javascript application/json image/svg+xml;
 
-    # Начни с 1 часа; когда убедишься, что HTTPS стабилен, подними до 31536000
-    add_header Strict-Transport-Security "max-age=3600" always;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options "nosniff" always;
 
     set $django_upstream http://web:8000;
 
@@ -68,8 +56,7 @@ server {
     location /media/ {
         alias /app/media/;
         expires 7d;
-        # add_header внутри location отменяет унаследованные — повторяем HSTS
-        add_header Strict-Transport-Security "max-age=3600" always;
+        add_header Strict-Transport-Security "max-age=31536000" always;
         add_header X-Content-Type-Options "nosniff" always;
     }
 }

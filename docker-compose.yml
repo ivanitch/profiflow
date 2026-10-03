@@ -1,51 +1,51 @@
+x-dev-app: &dev-app
+  build:
+    context: .
+    target: dev
+    args:
+      PYTHON_VERSION: ${PYTHON_VERSION:-3.14-slim}
+      NODE_VERSION: ${NODE_VERSION:-26-slim}
+  # Run as host user to avoid root-owned __pycache__ and node_modules
+  user: "${UID:-1000}:${GID:-1000}"
+  env_file: .env
+  environment:
+    DJANGO_SETTINGS_MODULE: config.settings.development
+    HOME: /tmp
+    npm_config_cache: /tmp/.npm-cache
+  volumes:
+    - .:/app
+
 services:
   db:
-    image: postgres:18-alpine
+    image: postgres:${POSTGRES_VERSION:-18-alpine}
     restart: unless-stopped
+    env_file: .env
+    ports:
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 10s
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 5s
       timeout: 5s
       retries: 5
 
   redis:
-    image: redis:8-alpine
+    image: redis:${REDIS_VERSION:-8-alpine}
     restart: unless-stopped
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
       timeout: 5s
       retries: 5
 
   web:
-    build:
-      context: .
-    restart: unless-stopped
+    <<: *dev-app
     ports:
-      - "8000:8000"
-    user: "${UID:-1000}:${GID:-1000}"
-    volumes:
-      - .:/app
-    environment:
-      - DEBUG=True
-      - SECRET_KEY=${SECRET_KEY}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=db
-      - DB_PORT=5432
-      - REDIS_URL=${REDIS_LOCATION}
-      - npm_config_cache=/tmp/.npm-cache
+      - "127.0.0.1:8000:8000"
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       db:
@@ -54,14 +54,7 @@ services:
         condition: service_healthy
 
   tailwind:
-    build:
-      context: .
-    restart: unless-stopped
-    user: "${UID:-1000}:${GID:-1000}"
-    volumes:
-      - .:/app
-    environment:
-      - npm_config_cache=/tmp/.npm-cache
+    <<: *dev-app
     command: python manage.py tailwind start
     depends_on:
       - web

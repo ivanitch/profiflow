@@ -1,51 +1,27 @@
-import os
+"""
+Base settings for the Django project.
+"""
+
 from pathlib import Path
-from dotenv import load_dotenv
+
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# .env — только удобство для local. override=False: окружение контейнера главнее файла.
-load_dotenv(BASE_DIR / ".env", override=False)
+# Initialize environ
+env = environ.Env()
+# Read .env file only if it exists. Docker environment variables take precedence.
+environ.Env.read_env(BASE_DIR / ".env", overwrite=False)
 
+SECRET_KEY = env.str("SECRET_KEY", default=None)
+DEBUG = env.bool("DEBUG", default=False)
 
-def env_bool(name, default=False):
-    return os.getenv(name, str(default)).strip().lower() in ("1", "true", "yes", "on")
-
-
-def env_list(name):
-    return [x.strip() for x in os.getenv(name, "").split(",") if x.strip()]
-
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = env_bool("DEBUG", False)
-ALLOWED_HOSTS = env_list("ALLOWED_HOSTS")
-CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 TAILWIND_APP_NAME = "theme"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "db"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-        "CONN_MAX_AGE": 60,
-        "CONN_HEALTH_CHECKS": True,
-    }
-}
-
-CACHE_TTL = int(os.getenv("CACHE_TTL", 900))
-if env_bool("CACHE_ENABLED") and os.getenv("REDIS_LOCATION"):
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": os.getenv("REDIS_LOCATION"),
-            "TIMEOUT": CACHE_TTL,
-        }
-    }
-
+# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -69,24 +45,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# Всё в stdout → видно в `docker compose logs web`
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"}
-    },
-    "handlers": {
-        "console": {"class": "logging.StreamHandler", "formatter": "verbose"}
-    },
-    "root": {
-        "handlers": ["console"], "level": os.getenv("LOG_LEVEL", "INFO")
-    },
-    "loggers": {
-        "django": {"handlers": ["console"], "level": "INFO", "propagate": False}
-    },
-}
-
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
@@ -99,34 +57,82 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.global_settings",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
+# Database & Cache
+DATABASES = {"default": env.db("DATABASE_URL", default="postgres://user:pass@db:5432/db")}
+DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
+DATABASES["default"]["CONN_MAX_AGE"] = 60
 
+if env.bool("CACHE_ENABLED", default=False):
+    CACHES = {"default": env.cache("REDIS_URL", default="redis://redis:6379/1")}
+
+# Logging (Output to Docker stdout)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"verbose": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"}},
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "verbose"}},
+    "root": {"handlers": ["console"], "level": env.str("LOG_LEVEL", default="INFO")},
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+    },
+}
+
+# i18n & Time
 LANGUAGE_CODE = "ru"
-TIME_ZONE = os.getenv("TIME_ZONE", "Europe/Moscow")
+TIME_ZONE = env.str("TIME_ZONE", default="UTC")
 USE_I18N = True
 USE_TZ = True
 
+# Static & Media files
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "theme/static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@localhost")
+# Project Settings
+try:
+    VERSION_FILE = BASE_DIR / ".version"
+    APP_VERSION = VERSION_FILE.read_text(encoding="utf-8").strip()
+except FileNotFoundError:
+    APP_VERSION = "0.0.0-dev"
 
-PER_PAGE = int(os.getenv("PER_PAGE", 15))
-APP_VERSION = os.getenv("APP_VERSION", "0.0.0")
-APP_NAME = os.getenv("APP_NAME")
-APP_TITLE = os.getenv("APP_TITLE")
+APP_NAME = env.str("APP_NAME", default="Django Starter")
+APP_TITLE = env.str("APP_TITLE", default="Django Starter — Production-ready template")
+
+# Users
+# AUTH_USER_MODEL = "users.User"
+# LOGIN_URL = "users:login"
+# LOGIN_REDIRECT_URL = "/users/profile/"
+
+
+# Email Configuration
+_email_user = env.str("EMAIL_HOST_USER", default="")
+
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": env.str("EMAIL_HOST", default="smtp.gmail.com"),
+            "port": env.int("EMAIL_PORT", default=587),
+            "use_tls": env.bool("EMAIL_USE_TLS", default=False),
+            "use_ssl": env.bool("EMAIL_USE_SSL", default=False),
+            "username": _email_user,
+            "password": env.str("EMAIL_HOST_PASSWORD", default=""),
+        },
+    }
+}
+
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default=_email_user)
+SERVER_EMAIL = env.str("SERVER_EMAIL", default=_email_user)
