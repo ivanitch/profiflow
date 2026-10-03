@@ -5,21 +5,22 @@ description = "Сервис онлайн-записи для бьюти-маст
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "cookiecutter>=2.7.1",
     "django>=6.1.1",
-    "django-debug-toolbar>=8.0.0",
-    "django-extensions>=4.1",
-    "django-tailwind[reload]>=4.5.0",
+    "django-tailwind>=4.5.0",
     "gunicorn>=26.2.0",
-    "ipython>=9.17.1",
     "pillow>=12.3.0",
     "psycopg>=3.3.5",
     "python-dotenv>=1.2.3",
     "python-slugify>=9.0.0",
+    "redis>=5.0",
 ]
 
 [dependency-groups]
 dev = [
+    "django-tailwind[reload]>=4.5.0",
     "django-debug-toolbar>=8.0.0",
+    "django-extensions>=4.1",
+    "ipython>=9.17.1",
     "pytest-django>=4.14.0",
+    "cookiecutter>=2.7.1",
 ]

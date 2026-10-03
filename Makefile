@@ -1,7 +1,3 @@
-# ================= VARIABLES =================
-include .env
-export
-
 DC = UID=$$(id -u) GID=$$(id -g) docker compose
 DC_PROD = docker compose -f docker-compose.yml -f docker-compose.prod.yml
 EXEC = $(DC) exec web
@@ -33,7 +29,11 @@ restart:
 ps:
 	$(DC) ps
 
+
 destroy:
+	@if [ -f .env.prod ]; then \
+		echo "Ошибка! На этом сервере есть .env.prod — destroy заблокирован."; exit 1; \
+	fi
 	@if [ "$${ENVIRONMENT}" = "production" ] || [ "$${ENVIRONMENT}" = "prod" ]; then \
 		echo "Ошибка! Команда 'destroy' заблокирована в production."; \
 		exit 1; \
@@ -47,10 +47,9 @@ destroy:
 
 # ================= BACKUPS =================
 db-backup:
-	@echo "Создание бэкапа базы данных..."
 	mkdir -p backups
-	$(DC) exec -T db pg_dump -U $(DB_USER) -d $(DB_NAME) -F c > backups/backup_$$(date +%Y%m%d_%H%M%S).dump
-	@echo "Бэкап успешно сохранен в папку backups/"
+	$(DC) exec -T db sh -c 'pg_dump -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -F c' \
+		> backups/backup_$$(date +%Y%m%d_%H%M%S).dump
 
 db-restore:
 	@if [ -z "$(file)" ]; then \
@@ -112,11 +111,21 @@ prod-logs:
 	$(DC_PROD) logs -f
 
 prod-deploy:
-	git pull
+	git pull --ff-only
 	$(DC_PROD) build
-	$(DC_PROD) up -d
-	$(DC_PROD) exec web python manage.py migrate
-	$(DC_PROD) exec web python manage.py collectstatic --noinput
+	$(MAKE) prod-backup
+	$(DC_PROD) run --rm web python manage.py migrate --noinput
+	$(DC_PROD) run --rm web python manage.py collectstatic --noinput
+	$(DC_PROD) up -d --remove-orphans
+	$(DC_PROD) ps
+
+prod-check:
+	$(DC_PROD) run --rm web python manage.py check --deploy
+
+prod-backup:
+	mkdir -p backups
+	$(DC_PROD) exec -T db sh -c 'pg_dump -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -F c' \
+		> backups/prod_$$(date +%Y%m%d_%H%M%S).dump
 
 # ================= HELP =================
 help:

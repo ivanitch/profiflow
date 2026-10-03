@@ -33,6 +33,7 @@ staticfiles/
 # ========================
 .env
 .env.local
+.env.prod
 .env.*.local
 .venv/
 venv/

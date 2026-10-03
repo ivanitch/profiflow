@@ -1,156 +1,132 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-load_dotenv(dotenv_path=BASE_DIR / '.env', override=True)
+# .env — только удобство для local. override=False: окружение контейнера главнее файла.
+load_dotenv(BASE_DIR / ".env", override=False)
 
-SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1')
+def env_bool(name, default=False):
+    return os.getenv(name, str(default)).strip().lower() in ("1", "true", "yes", "on")
 
-ALLOWED_HOSTS = ["*"] if DEBUG else os.getenv("ALLOWED_HOSTS", "").split(",")
+
+def env_list(name):
+    return [x.strip() for x in os.getenv(name, "").split(",") if x.strip()]
+
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = env_bool("DEBUG", False)
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS")
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 
 TAILWIND_APP_NAME = "theme"
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
-# Database
-# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'db'),
-        'PORT': os.getenv('DB_PORT'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "db"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+        "CONN_MAX_AGE": 60,
+        "CONN_HEALTH_CHECKS": True,
     }
 }
 
-# Application definition
+CACHE_TTL = int(os.getenv("CACHE_TTL", 900))
+if env_bool("CACHE_ENABLED") and os.getenv("REDIS_LOCATION"):
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv("REDIS_LOCATION"),
+            "TIMEOUT": CACHE_TTL,
+        }
+    }
+
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     "theme",
     "tailwind",
-    "debug_toolbar",
-    'apps.main.apps.MainConfig',
-    'apps.demo.apps.DemoConfig',
+    "apps.main.apps.MainConfig",
+    "apps.demo.apps.DemoConfig",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': '{levelname} {asctime} [{module}:{lineno}] {message}',
-#             'style': '{',
-#         },
-#     },
-#     'handlers': {
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'debug.log'),
-#             'formatter': 'verbose',
-#             'encoding': 'utf-8',
-#         },
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'verbose',
-#         },
-#     },
-#     'loggers': {
-#         'main': {
-#             'handlers': ['file', 'console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
+# Всё в stdout → видно в `docker compose logs web`
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"}
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "verbose"}
+    },
+    "root": {
+        "handlers": ["console"], "level": os.getenv("LOG_LEVEL", "INFO")
+    },
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "INFO", "propagate": False}
+    },
+}
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
-# Password validation
-# https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/6.1/topics/i18n/
-LANGUAGE_CODE = 'ru'
-
-TIME_ZONE = os.getenv('TIME_ZONE')
-
+LANGUAGE_CODE = "ru"
+TIME_ZONE = os.getenv("TIME_ZONE", "Europe/Moscow")
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
-# AUTH_USER_MODEL = 'users.User'
-#
-# LOGIN_URL = 'users:login'
-# LOGIN_REDIRECT_URL = '/users/profile/'
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "theme/static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'theme/static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@localhost")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-PER_PAGE = int(os.getenv('PER_PAGE', 15))
-
-APP_VERSION = os.getenv('APP_VERSION', '0.6.0')
-APP_NAME = os.getenv('APP_NAME')
-APP_TITLE = os.getenv('APP_TITLE')
+PER_PAGE = int(os.getenv("PER_PAGE", 15))
+APP_VERSION = os.getenv("APP_VERSION", "0.0.0")
+APP_NAME = os.getenv("APP_NAME")
+APP_TITLE = os.getenv("APP_TITLE")
