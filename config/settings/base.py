@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "tailwind",
     "apps.main.apps.MainConfig",
     "apps.demo.apps.DemoConfig",
+    "apps.users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -112,9 +113,9 @@ APP_NAME = env.str("APP_NAME", default="Django Starter")
 APP_TITLE = env.str("APP_TITLE", default="Django Starter — Production-ready template")
 
 # Users
-# AUTH_USER_MODEL = "users.User"
-# LOGIN_URL = "users:login"
-# LOGIN_REDIRECT_URL = "/users/profile/"
+AUTH_USER_MODEL = "users.User"
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "/users/profile/"
 
 
 # Email Configuration
