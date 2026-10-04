@@ -37,7 +37,7 @@ make up
 
 This builds images, starts the database, and launches Django + Tailwind watcher.
 
-4. **Миграции и superuser:**
+4. **Миграции и `superuser`:**
 
 ```bash
 make migrate
@@ -61,5 +61,6 @@ make logs db
 ## Дополнительно
 
 - [Шпаргалка по командам Make](docs/make.md)
-- [Шпаргалка: Tailwind + Django (uv)](docs/tailwind.md)
+- [Шпаргалка: Tailwind + Django](docs/tailwind.md)
+- [Настройка CI/CD (GitHub Actions)](docs/ci.md)
 
