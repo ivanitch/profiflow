@@ -1,15 +1,25 @@
+"""
+Local development settings.
+"""
+
 import socket
-from .base import *
+
+from .base import *  # noqa: F403
+from .base import INSTALLED_APPS, MAILERS, MIDDLEWARE, SECRET_KEY
 
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
-SECRET_KEY = SECRET_KEY or "django-insecure-local-only"
 
-INSTALLED_APPS += ["debug_toolbar"]
-MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+# Provide a fallback key for local dev if missing
+if not SECRET_KEY:
+    SECRET_KEY = "django-insecure-local-only-not-for-production"
 
-# В Docker запрос приходит с IP шлюза сети (x.x.x.1), а не с 127.0.0.1
-_, _, _ips = socket.gethostbyname_ex(socket.gethostname())
+INSTALLED_APPS += ["debug_toolbar"]  # noqa
+MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa
+
+# Allow debug_toolbar to work inside Docker (where requests come from the gateway IP)
+_host, _aliases, _ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = ["127.0.0.1"] + [ip.rsplit(".", 1)[0] + ".1" for ip in _ips]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+MAILERS["default"]["BACKEND"] = "django.core.mail.backends.console.EmailBackend"
+MAILERS["default"]["OPTIONS"] = {}

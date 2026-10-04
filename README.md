@@ -1,16 +1,18 @@
-[//]: # (<p align="center"><a href="https://profiflow.pro" target="_blank">)
-
-[//]: # (    <img src="docs/img/profiflow.jpeg" alt="ProfiFlow Logo">)
-
-[//]: # (</a></p>)
-
-# Profi Flow
+# ProfiFlow
 
 Cервис онлайн-записи для бьюти-мастеров и студий.
 
 ## Стек технологий
 
-![Debian](https://img.shields.io/badge/Debian-OS-A81D33?logo=debian&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-v2-2496ED?logo=docker&logoColor=white) ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white) ![uv](https://img.shields.io/badge/uv-Manager-8A2BE2) ![Django](https://img.shields.io/badge/Django-6.1-092E20?logo=django&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-4169E1?logo=postgresql&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-8-DC382D?logo=redis&logoColor=white) ![Nginx](https://img.shields.io/badge/Nginx-1.31-009639?logo=nginx&logoColor=white)
+<p align="left">
+  <img src="https://img.shields.io/badge/python-3.14-blue?logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/django-6.x-092E20?logo=django&logoColor=white" alt="Django">
+  <img src="https://img.shields.io/badge/postgres-18-316192?logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/redis-8-DC382D?logo=redis&logoColor=white" alt="Redis">
+  <img src="https://img.shields.io/badge/docker--compose-2496ED?logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/tailwindcss-38B2AC?logo=tailwind-css&logoColor=white" alt="TailwindCSS">
+  <img src="https://img.shields.io/badge/uv-manager-8A2BE2?logo=python&logoColor=white" alt="uv">
+</p>
 
 ## Быстрый старт
 
@@ -27,29 +29,32 @@ cd profiflow
 cp .env.example .env
 ```
 
-3. **Сборка и запуск контейнеров (Make):**
+3. **Запуск проекта (Make):**
 
 ```bash
-make build
 make up
 ```
 
-4. **Настройка Django:**
+This builds images, starts the database, and launches Django + Tailwind watcher.
+
+4. **Миграции и superuser:**
 
 ```bash
-make migrate        # Применение миграций БД
-make collectstatic  # Сборка статики для Nginx
-make superuser      # Создание панели администратора + cоздание суперпользователя
+make migrate
+make bash
+# Inside container:
+python manage.py createsuperuser
 ````
 
-3. **Миграции:**
+5. **Логи:**
 
 ```bash
-make makemigrations
-make migrate
+make logs
+
+make logs db
 ```
 
-Открыть в браузере `http://localhost/` или `http://profiflow.loc/`
+Открыть в браузере `http://localhost/:8000`
 
 ---
 
