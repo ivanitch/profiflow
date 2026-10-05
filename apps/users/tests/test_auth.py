@@ -37,7 +37,6 @@ class TestAuthenticationFlow:
         data = {
             "email": "newuser@example.com",
             "phone": "+1234567890",
-            "country": "UK",
             "password1": "StrongPass123!",
             "password2": "StrongPass123!",
         }
@@ -88,7 +87,6 @@ class TestAuthenticationFlow:
 
     def test_activate_account_already_active(self, client):
         user = User.objects.create_user(email="active@example.com", password="password123")
-        # is_active=True по умолчанию
         uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
 
@@ -134,36 +132,28 @@ class TestAuthenticationFlow:
         data = {
             "email": "newemail@example.com",
             "phone": "+987654321",
-            "country": "CA",
         }
         response = client.post(url, data)
 
         assert response.status_code == 302
         user.refresh_from_db()
         assert user.email == "newemail@example.com"
-        assert user.country == "CA"
 
     def test_profile_update_duplicate_email_fails(self, client):
-        # Создаем стороннего пользователя для конфликта email
         User.objects.create_user(email="taken@example.com", password="password123")
-
-        # Авторизуемся под текущим пользователем
         user = User.objects.create_user(email="myprofile@example.com", password="password123")
         client.force_login(user)
 
         url = reverse("users:profile")
         data = {
-            "email": "taken@example.com",  # Пытаемся занять чужой email
+            "email": "taken@example.com",
             "phone": "+987654321",
-            "country": "CA",
         }
         response = client.post(url, data)
 
-        # Форма возвращает ошибку (status code 200, а не 302 редирект)
         assert response.status_code == 200
         assert "A user with that email already exists." in response.content.decode()
 
-        # Проверяем, что email в БД не изменился
         user.refresh_from_db()
         assert user.email == "myprofile@example.com"
 

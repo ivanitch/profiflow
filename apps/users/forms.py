@@ -1,11 +1,9 @@
-# users/forms.py
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
 
-from .models import User
+from .models import MasterProfile, User
 
-# Единый стиль для всех инпутов DaisyUI
 DAISY_INPUT_CLASS = (
     "input w-full bg-base-200 border-none focus:outline-none focus:ring-2"
     " focus:ring-primary/30 rounded-sm transition-shadow"
@@ -15,7 +13,7 @@ DAISY_INPUT_CLASS = (
 class UserRegisterForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email", "phone", "country")
+        fields = ("email", "phone")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,7 +33,7 @@ class UserLoginForm(AuthenticationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("email", "phone", "country", "avatar")
+        fields = ("email", "phone")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,3 +45,15 @@ class UserProfileForm(forms.ModelForm):
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
             raise ValidationError("A user with that email already exists.")
         return email
+
+
+class MasterProfileForm(forms.ModelForm):
+    class Meta:
+        model = MasterProfile
+        fields = ("avatar", "city")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != "avatar":
+                field.widget.attrs["class"] = DAISY_INPUT_CLASS
