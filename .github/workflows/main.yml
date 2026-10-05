@@ -84,6 +84,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /home/profiflow/profiflow_pro
+            cd ${{secrets.PROJECT_PATH}}
             git pull origin master
             make prod-deploy
