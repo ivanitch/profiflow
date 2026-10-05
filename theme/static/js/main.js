@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!themeToggleBtn) return;
 
-  // Инициализация при загрузке
+  // Установка правильной иконки при загрузке
   if (document.documentElement.classList.contains('dark')) {
     lightIcon.classList.remove('hidden');
-    document.documentElement.setAttribute('data-theme', 'dark');
   } else {
     darkIcon.classList.remove('hidden');
-    document.documentElement.setAttribute('data-theme', 'light');
   }
 
   themeToggleBtn.addEventListener('click', function () {
@@ -19,12 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     lightIcon.classList.toggle('hidden');
 
     if (document.documentElement.classList.contains('dark')) {
-      // Переход в светлую
+      // Light
       document.documentElement.classList.remove('dark');
       document.documentElement.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
     } else {
-      // Переход в темную
+      // Dark
       document.documentElement.classList.add('dark');
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
