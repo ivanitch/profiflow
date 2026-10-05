@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     "apps.main.apps.MainConfig",
     "apps.demo.apps.DemoConfig",
     "apps.users.apps.UsersConfig",
+    "apps.base.apps.BaseConfig",
+    "apps.catalog.apps.CatalogConfig",
 ]
 
 MIDDLEWARE = [
@@ -58,7 +60,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "core.context_processors.global_settings",
+                "kernel.context_processors.global_settings",
             ],
         },
     },
