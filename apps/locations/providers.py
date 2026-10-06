@@ -26,11 +26,10 @@ class LocalDatabaseProvider(LocationProvider):
         return [{"name": c.name, "region": c.region, "timezone": c.timezone} for c in cities]
 
     def get_or_create_city(self, name: str, region: str | None = None) -> City:
-        # На старте мы просто берем город из базы. Если его нет - создаем болванку.
         city, created = City.objects.get_or_create(
             name=name,
             region=region,
-            defaults={"timezone": "Europe/Moscow"},  # Фолбэк, если города не было в нашем JSON
+            defaults={"timezone": "Europe/Moscow"},
         )
         return city
 
@@ -39,13 +38,7 @@ class DaDataProvider(LocationProvider):
     """Phase 2: Идет в API DaData, обогащает данные и сохраняет в нашу БД."""
 
     def search_cities(self, query: str) -> list[dict]:
-        # Логика HTTP-запроса к dadata.ru/api/suggest/address
-        # Возвращаем стандартизированный ответ
-        pass
+        raise NotImplementedError("Интеграция с DaData запланирована на Phase 2")
 
     def get_or_create_city(self, name: str, region: str | None = None) -> City:
-        # 1. Ищем в локальной БД (чтобы не платить за API каждый раз)
-        # 2. Если нет -> идем в DaData -> получаем timezone и координаты
-        # 3. Сохраняем в локальную БД City.objects.create(...)
-        # 4. Возвращаем объект
-        pass
+        raise NotImplementedError("Интеграция с DaData запланирована на Phase 2")
