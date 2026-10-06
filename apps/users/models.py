@@ -48,29 +48,63 @@ class User(AbstractUser):
 
 class MasterProfile(models.Model):
     """
-    Бизнес-профиль мастера. Все публичные и настроечные данные лежат здесь.
+    Бизнес-профиль мастера. Все публичные и настроечные данные SaaS лежат здесь.
     """
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        "users.User", on_delete=models.CASCADE, related_name="profile", verbose_name="Пользователь"
+    )
 
-    # Публичные данные (которые увидит клиент по ссылке)
-    avatar = models.ImageField(_("Аватар"), upload_to="users/avatars/", blank=True, null=True)
-    city = models.CharField(_("Город"), max_length=100, blank=True, null=True, db_index=True)
+    avatar = models.ImageField(upload_to="users/avatars/", blank=True, null=True, verbose_name="Аватар")
+    city = models.CharField(max_length=100, blank=True, null=True, db_index=True, verbose_name="Город")
 
-    # Ссылка для онлайн-записи (profiflow.pro/m/anastasia)
-    booking_slug = models.SlugField(max_length=100, unique=True, null=True, blank=True, db_index=True)
+    booking_slug = models.SlugField(
+        max_length=100,
+        unique=True,
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name="URL для записи (slug)",
+        help_text="Уникальная ссылка вида profiflow.pro/m/slug",
+    )
 
-    # Локализация и финансы
-    timezone = models.CharField(max_length=50, default="Asia/Yakutsk")
-    currency = models.CharField(max_length=10, default="RUB")
+    timezone = models.CharField(max_length=50, default="Asia/Yakutsk", verbose_name="Часовой пояс")
+    currency = models.CharField(max_length=10, default="RUB", verbose_name="Валюта")
 
-    # Статус онбординга
-    is_onboarding_completed = models.BooleanField(default=False)
+    is_onboarding_completed = models.BooleanField(default=False, verbose_name="Онбординг пройден")
 
     class Meta:
         db_table = "users_master_profile"
-        verbose_name = _("Профиль мастреа")
-        verbose_name_plural = _("Профили мастеров")
+        verbose_name = "Профиль мастера"
+        verbose_name_plural = "Профили мастеров"
 
     def __str__(self):
         return f"Профиль мастера: {self.user.email}"
+
+
+class ClientProfile(models.Model):
+    """
+    Личный кабинет зарегистрированного клиента.
+    Сюда клиент заходит, чтобы посмотреть свои записи и любимых мастеров.
+    """
+
+    user = models.OneToOneField(
+        "users.User", on_delete=models.CASCADE, related_name="client_profile", verbose_name="Пользователь"
+    )
+    first_name = models.CharField(max_length=100, verbose_name="Имя")
+    last_name = models.CharField(max_length=100, blank=True, verbose_name="Фамилия")
+    avatar = models.ImageField(upload_to="users/clients/avatars/", blank=True, null=True, verbose_name="Аватар")
+
+    city = models.ForeignKey("locations.City", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Город")
+
+    favorites_masters = models.ManyToManyField(
+        "users.MasterProfile", blank=True, related_name="favorited_by", verbose_name="Избранные мастера"
+    )
+
+    class Meta:
+        db_table = "users_client_profile"
+        verbose_name = "Профиль клиента"
+        verbose_name_plural = "Профили клиентов"
+
+    def __str__(self):
+        return f"Клиент: {self.first_name} {self.last_name}".strip() or self.user.email
