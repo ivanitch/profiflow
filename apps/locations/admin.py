@@ -5,6 +5,7 @@ from .models import City
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    exclude = ("timezone",)
-    readonly_fields = ("lat", "lon")
+    list_display = ("name", "region", "timezone", "slug")
     search_fields = ("name", "region")
+    list_filter = ("timezone",)
+    prepopulated_fields = {"slug": ("name",)}

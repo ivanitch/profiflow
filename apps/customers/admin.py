@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Customer
+from apps.customers.models import Customer
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    search_fields = ("master",)
+    search_fields = ("email", "phone")
