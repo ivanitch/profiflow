@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.base.apps.BaseConfig",
     "apps.catalog.apps.CatalogConfig",
+    "apps.locations.apps.LocationsConfig",
+    "apps.booking.apps.BookingConfig",
+    "apps.customers.apps.CustomersConfig",
 ]
 
 MIDDLEWARE = [
@@ -139,3 +142,6 @@ MAILERS = {
 
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default=_email_user)
 SERVER_EMAIL = env.str("SERVER_EMAIL", default=_email_user)
+
+# Locations (Region, City)
+LOCATION_PROVIDER = "local"
