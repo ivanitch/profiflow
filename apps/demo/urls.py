@@ -7,6 +7,7 @@ from .views import (
     client_page,
     services_page,
     source_page,
+    components_page,
 )
 
 app_name = "demo"
@@ -18,4 +19,5 @@ urlpatterns = [
     path("appointment-page/", appointment_page, name="appointment-page"),
     path("calendar-page/", calendar_page, name="calendar-page"),
     path("services-page/", services_page, name="services-page"),
+    path("components-page/", components_page, name="components-page"),
 ]

@@ -24,3 +24,6 @@ def calendar_page(request):
 
 def services_page(request):
     return render(request, "demo/services.html")
+
+def components_page(request):
+    return render(request, "demo/components.html")
