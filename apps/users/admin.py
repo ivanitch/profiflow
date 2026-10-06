@@ -16,7 +16,7 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ("email", "phone")
     ordering = ("email",)
 
-    # Переопределяем fieldsets, чтобы убрать username
+    # Переопределяем fieldsets для страницы РЕДАКТИРОВАНИЯ
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (_("Personal info"), {"fields": ("phone",)}),
@@ -29,6 +29,15 @@ class CustomUserAdmin(UserAdmin):
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
 
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
+        ),
+    )
 
 @admin.register(MasterProfile)
 class MasterProfileAdmin(admin.ModelAdmin):
