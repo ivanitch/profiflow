@@ -56,7 +56,8 @@ class MasterProfile(models.Model):
     )
 
     avatar = models.ImageField(upload_to="users/avatars/", blank=True, null=True, verbose_name="Аватар")
-    city = models.CharField(max_length=100, blank=True, null=True, db_index=True, verbose_name="Город")
+
+    city = models.ForeignKey("locations.City", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Город")
 
     booking_slug = models.SlugField(
         max_length=100,
