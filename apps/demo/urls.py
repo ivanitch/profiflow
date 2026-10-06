@@ -5,9 +5,9 @@ from .views import (
     calendar_page,
     client_list_page,
     client_page,
+    components_page,
     services_page,
     source_page,
-    components_page,
 )
 
 app_name = "demo"

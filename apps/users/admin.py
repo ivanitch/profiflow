@@ -39,6 +39,7 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
 
+
 @admin.register(MasterProfile)
 class MasterProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "booking_slug", "city", "is_onboarding_completed")
