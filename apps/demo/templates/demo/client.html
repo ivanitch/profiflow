@@ -3,6 +3,7 @@
 {% block title %}Анастасия В. - {{ APP_NAME }}{% endblock %}
 
 {% block content %}
+    <!-- Хедер страницы клиента -->
     <div class="px-4 md:px-8 py-4 md:py-5 shrink-0 flex flex-col gap-4">
         <div class="flex items-center text-xs font-medium text-jira-text gap-2">
             <span class="hover:underline cursor-pointer">Клиенты</span> /
@@ -12,14 +13,14 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
                 <div class="avatar placeholder">
-                    <div class="bg-pink-900 text-pink-200 rounded-full w-12 h-12 text-lg ring-1 ring-jira-border">
+                    <div class="bg-pink-900 text-pink-200 rounded-md w-12 h-12 text-lg ring-1 ring-jira-border">
                         <span>АВ</span>
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">
                     <div class="flex items-center gap-3">
                         <h1 class="text-xl md:text-2xl font-semibold text-jira-textBright">Анастасия В.</h1>
-                        <!-- РЕЙТИНГ (Пункт 8) -->
+                        <!-- РЕЙТИНГ -->
                         <div class="flex items-center gap-1 bg-yellow-500/10 text-yellow-600 dark:text-yellow-500 border border-yellow-500/20 px-2 py-0.5 rounded text-xs font-medium" title="На основе 12 визитов">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                             4.9
@@ -30,16 +31,16 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <!-- Оставили только Записать (кнопка Редактировать скрыта для мастера) -->
-                <label for="booking_modal" class="cursor-pointer px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5">
+                <!-- Оставили только "Новая запись" (Вызывает модалку) -->
+                <button onclick="booking_modal.showModal()" class="px-3 py-1.5 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none inline-flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Новая запись
-                </label>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Основной контент (Менее скругленные углы - rounded-md вместо rounded-xl) -->
+    <!-- Основной контент (Скругления rounded-md) -->
     <div class="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-8 pb-10">
         <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[350px_1fr] gap-6">
 
@@ -64,9 +65,11 @@
                     </div>
                 </div>
 
-                <!-- Детализированная статистика (Пункты 6 и 7) -->
+                <!-- Детализированная статистика -->
                 <div class="bg-jira-panel rounded-md p-4 border border-jira-border flex flex-col gap-4 shadow-sm">
-                    <h3 class="text-xs font-semibold text-jira-text uppercase tracking-wide">Аналитика визитов</h3>
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-semibold text-jira-text uppercase tracking-wide">Аналитика</h3>
+                    </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-jira-bg p-3 rounded border border-jira-border flex flex-col">
@@ -100,21 +103,21 @@
             <!-- ПРАВАЯ КОЛОНКА: ИСТОРИЯ ЗАПИСЕЙ -->
             <div class="flex flex-col gap-4">
 
-                <!-- Вкладки фильтрации (Пункт 3) -->
+                <!-- Вкладки фильтрации -->
                 <div class="flex items-center justify-between border-b border-jira-border pb-px">
                     <div class="flex gap-4">
                         <button class="text-sm font-medium text-jira-primary border-b-2 border-jira-primary pb-2 px-1">Все записи (12)</button>
-                        <button class="text-sm font-medium text-jira-text hover:text-jira-textBright transition-colors border-b-2 border-transparent pb-2 px-1">Предстоящие (1)</button>
+                        <button class="text-sm font-medium text-jira-text hover:text-jira-textBright transition-colors border-b-2 border-transparent pb-2 px-1">Успешные (9)</button>
                         <button class="text-sm font-medium text-jira-text hover:text-jira-textBright transition-colors border-b-2 border-transparent pb-2 px-1">Отмены (3)</button>
                     </div>
                 </div>
 
-                <!-- Таблица для ПК (Пункт 2) -->
+                <!-- Таблица для ПК -->
                 <div class="hidden md:block bg-jira-panel border border-jira-border rounded-md shadow-sm overflow-hidden">
                     <table class="table w-full text-sm">
                         <thead class="text-jira-text uppercase text-[10px] tracking-wider border-b border-jira-border bg-jira-bg/50">
                             <tr>
-                                <th class="font-semibold py-3 pl-4">Дата и Мастер</th>
+                                <th class="font-semibold py-3 pl-4">Дата и Время</th>
                                 <th class="font-semibold py-3">Услуга</th>
                                 <th class="font-semibold py-3 text-right">Стоимость</th>
                                 <th class="font-semibold py-3 text-center">Статус</th>
@@ -125,8 +128,8 @@
                             <tr class="border-b border-jira-border hover:bg-jira-bg/50 transition-colors">
                                 <td class="py-3 pl-4">
                                     <div class="flex flex-col">
-                                        <span class="font-medium">15 Сент. 2026, 10:00</span>
-                                        <span class="text-xs text-jira-text">Мастер: Екатерина Л.</span>
+                                        <span class="font-medium">15 Сент. 2026</span>
+                                        <span class="text-xs text-jira-text">10:00 - 13:30</span>
                                     </div>
                                 </td>
                                 <td class="py-3">
@@ -143,33 +146,13 @@
                                     <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-border rounded transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg></button>
                                 </td>
                             </tr>
-                            <tr class="border-b border-jira-border hover:bg-jira-bg/50 transition-colors">
-                                <td class="py-3 pl-4">
-                                    <div class="flex flex-col">
-                                        <span class="font-medium">10 Авг. 2026, 14:00</span>
-                                        <span class="text-xs text-jira-text">Мастер: Ольга П.</span>
-                                    </div>
-                                </td>
-                                <td class="py-3">
-                                    <div class="flex flex-col">
-                                        <span>Стрижка кончиков</span>
-                                        <span class="text-[10px] text-jira-text font-mono mt-0.5">ID-089</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 text-right font-semibold">1 200 ₽</td>
-                                <td class="py-3 text-center">
-                                    <span class="bg-green-500/15 text-green-800 dark:text-green-400 border border-green-500/30 px-2 py-0.5 rounded text-[10px] font-medium">Завершено</span>
-                                </td>
-                                <td class="py-3 pr-4 text-center">
-                                    <button class="p-1.5 text-jira-text hover:text-jira-textBright hover:bg-jira-border rounded transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg></button>
-                                </td>
-                            </tr>
+
                             <!-- Пример отмененной записи -->
                             <tr class="hover:bg-jira-bg/50 transition-colors opacity-75">
                                 <td class="py-3 pl-4">
                                     <div class="flex flex-col">
-                                        <span class="font-medium">01 Авг. 2026, 12:00</span>
-                                        <span class="text-xs text-jira-text">Мастер: Екатерина Л.</span>
+                                        <span class="font-medium">01 Авг. 2026</span>
+                                        <span class="text-xs text-jira-text">12:00 - 14:00</span>
                                     </div>
                                 </td>
                                 <td class="py-3">
@@ -190,13 +173,13 @@
                     </table>
                 </div>
 
-                <!-- Карточки для мобильных устройств -->
+                <!-- Карточки для мобильных устройств (Скрыты на ПК) -->
                 <div class="md:hidden flex flex-col gap-3">
                     <div class="bg-jira-panel border border-jira-border rounded-md p-4 shadow-sm flex flex-col gap-3">
                         <div class="flex justify-between items-start">
                             <div class="flex flex-col gap-0.5">
                                 <span class="font-medium text-jira-textBright">Сложное окрашивание</span>
-                                <span class="text-xs text-jira-text">15 Сент. 2026 • Мастер: Екат...</span>
+                                <span class="text-xs text-jira-text">15 Сент. 2026 • 10:00</span>
                             </div>
                             <span class="bg-green-500/15 text-green-800 dark:text-green-400 border border-green-500/30 px-1.5 py-0.5 rounded text-[10px] font-medium">Завершено</span>
                         </div>
@@ -210,4 +193,63 @@
             </div>
         </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО: ФОРМА СОЗДАНИЯ ЗАПИСИ      -->
+    <!-- ========================================== -->
+    <dialog id="booking_modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box bg-jira-panel border border-jira-border shadow-2xl p-0 overflow-hidden rounded-md">
+
+            <div class="px-6 py-4 border-b border-jira-border flex justify-between items-center bg-jira-bg">
+                <h3 class="font-semibold text-lg text-jira-textBright">Новая запись: Анастасия В.</h3>
+                <form method="dialog">
+                    <button class="text-jira-text hover:text-jira-textBright transition-colors p-1 rounded-md hover:bg-jira-panel">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </form>
+            </div>
+
+            <div class="p-6 flex flex-col gap-4">
+                <div class="form-control w-full">
+                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Услуга</span></label>
+                    <select class="select select-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 leading-tight">
+                        <option disabled selected>Выберите услугу...</option>
+                        <option>Сложное окрашивание</option>
+                        <option>Стрижка женская</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="form-control w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Дата</span></label>
+                        <input type="date" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                    </div>
+                    <div class="form-control w-1/2">
+                        <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Время</span></label>
+                        <input type="time" class="input input-bordered w-full bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent min-h-0 h-9 px-3" />
+                    </div>
+                </div>
+
+                <div class="form-control w-full">
+                    <label class="label pt-0 pb-1"><span class="label-text text-xs font-semibold text-jira-text uppercase">Комментарий к записи</span></label>
+                    <textarea class="textarea textarea-bordered h-20 bg-jira-bg border-jira-border text-jira-textBright focus:outline-none focus:border-jira-accent py-2 px-3 leading-relaxed" placeholder="Пожелания клиента, формулы окрашивания..."></textarea>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-jira-border bg-jira-bg flex justify-end gap-3">
+                <form method="dialog">
+                    <button class="px-4 py-2 bg-transparent border border-jira-border text-jira-textBright rounded-md hover:bg-jira-panel transition-colors text-sm font-medium">
+                        Отмена
+                    </button>
+                </form>
+                <button class="px-4 py-2 bg-jira-primary text-white rounded-md text-sm font-medium hover:bg-jira-primaryHover transition-colors border-none shadow-none">
+                    Создать запись
+                </button>
+            </div>
+
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 {% endblock %}
