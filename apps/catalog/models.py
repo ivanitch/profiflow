@@ -45,11 +45,23 @@ class Service(SoftDeleteModel):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Цена")
     duration = models.PositiveIntegerField(default=60, verbose_name="Длительность", help_text="В минутах")
 
+    @property
+    def formatted_duration(self):
+        hours = self.duration // 60
+        minutes = self.duration % 60
+
+        if hours and minutes:
+            return f"{hours} ч {minutes} мин"
+        elif hours:
+            return f"{hours} ч"
+        return f"{minutes} мин"
+
     class Meta:
         db_table = "catalog_service"
         verbose_name = "Услуга"
         verbose_name_plural = "Услуги"
-        ordering = ["category__order", "name"]
+
+        ordering = ["category__order", "price", "name"]
         indexes = [
             models.Index(fields=["master", "is_deleted"]),
         ]
