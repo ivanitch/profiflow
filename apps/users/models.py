@@ -55,7 +55,10 @@ class MasterProfile(models.Model):
         "users.User", on_delete=models.CASCADE, related_name="profile", verbose_name="Пользователь"
     )
 
-    avatar = models.ImageField(upload_to="users/avatars/", blank=True, null=True, verbose_name="Аватар")
+    first_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Имя")
+    last_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Фамилия")
+
+    avatar = models.ImageField(upload_to="users/masters/avatars/", blank=True, null=True, verbose_name="Аватар")
 
     city = models.ForeignKey("locations.City", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Город")
 
@@ -92,8 +95,8 @@ class ClientProfile(models.Model):
     user = models.OneToOneField(
         "users.User", on_delete=models.CASCADE, related_name="client_profile", verbose_name="Пользователь"
     )
-    first_name = models.CharField(max_length=100, verbose_name="Имя")
-    last_name = models.CharField(max_length=100, blank=True, verbose_name="Фамилия")
+    first_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Имя")
+    last_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Фамилия")
     avatar = models.ImageField(upload_to="users/clients/avatars/", blank=True, null=True, verbose_name="Аватар")
 
     city = models.ForeignKey("locations.City", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Город")

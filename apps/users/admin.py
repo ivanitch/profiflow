@@ -42,9 +42,9 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(MasterProfile)
 class MasterProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "booking_slug", "city", "is_onboarding_completed")
+    list_display = ("user", "first_name", "last_name", "booking_slug", "city", "is_onboarding_completed")
     list_filter = ("is_onboarding_completed", "city")
-    search_fields = ("user__email", "booking_slug")
+    search_fields = ("user__email", "first_name", "last_name", "booking_slug")
     autocomplete_fields = ("user", "city")
 
 
