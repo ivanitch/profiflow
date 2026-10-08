@@ -28,8 +28,8 @@ sudo usermod -aG docker $USER && newgrp docker
 Загрузи проект и подготовь боевой конфигурационный файл.
 
 ```bash
-git clone git@github.com:ivanitch/django-starter.git django-project
-cd django-project
+git clone https://github.com/ivanitch/profiflow.git profiflow
+cd profiflow
 cp .env.prod.example .env.prod
 nano .env.prod
 ```
