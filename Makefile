@@ -1,4 +1,4 @@
-.PHONY: help ps build up down restart logs shell bash migrate makemigrations startapp collectstatic tailwind db-backup db-restore db-restore-latest destroy lint format test prod-build prod-up prod-down prod-deploy prod-logs prod-shell prod-bash prod-migrate prod-collectstatic prod-db-backup prod-db-restore prod-db-restore-latest prod-init-ssl
+.PHONY: help ps build up down restart logs shell bash migrate makemigrations startapp collectstatic tailwind db-backup db-restore db-restore-latest destroy lint format test check prod-build prod-up prod-down prod-deploy prod-logs prod-shell prod-bash prod-migrate prod-collectstatic prod-db-backup prod-db-restore prod-db-restore-latest prod-init-ssl
 
 # ==========================================
 # VARIABLES
@@ -112,6 +112,13 @@ format:
 
 test:
 	$(DC) run --rm web uv run pytest
+
+check:
+	@echo "Автоматическое форматирование и исправление..."
+	$(DC) exec web uv run ruff check --fix .
+	$(DC) exec web uv run ruff format .
+	@echo "Поиск оставшихся логических ошибок..."
+	$(DC) exec web uv run ruff check .
 
 db-backup:
 	@mkdir -p backups

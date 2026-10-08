@@ -9,5 +9,5 @@ class IndexRedirectView(View):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('dashboard:home')
-        return redirect('users:login')
+            return redirect("dashboard:home")
+        return redirect("users:login")
