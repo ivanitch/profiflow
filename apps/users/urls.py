@@ -1,38 +1,18 @@
-from django.contrib.auth import views as auth_views
 from django.urls import path
-
-from . import views
+from apps.users import views
 
 app_name = "users"
 
 urlpatterns = [
-    path("register/", views.RegisterView.as_view(), name="register"),
-    path("activate/<uidb64>/<token>/", views.ActivateAccountView.as_view(), name="activate"),
+    # Аутентификация
     path("login/", views.UserLoginView.as_view(), name="login"),
+    path("register/", views.RegisterView.as_view(), name="register"),  # Обновил имя класса на RegisterView
     path("logout/", views.UserLogoutView.as_view(), name="logout"),
+
+    # Настройки профилей (Пока закомментируем, чтобы не ломался запуск)
+    # path("settings/master/", views.MasterProfileEditView.as_view(), name="master_settings"),
+    # path("settings/client/", views.ClientProfileEditView.as_view(), name="client_settings"),
+
+    # Существующий View для профиля из твоего файла views.py
     path("profile/", views.UserProfileView.as_view(), name="profile"),
-    path(
-        "password-reset/",
-        auth_views.PasswordResetView.as_view(
-            template_name="users/password_reset.html", success_url="/users/password-reset/done/"
-        ),
-        name="password_reset",
-    ),
-    path(
-        "password-reset/done/",
-        auth_views.PasswordResetDoneView.as_view(template_name="users/password_reset_done.html"),
-        name="password_reset_done",
-    ),
-    path(
-        "password-reset-confirm/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name="users/password_reset_confirm.html", success_url="/users/password-reset-complete/"
-        ),
-        name="password_reset_confirm",
-    ),
-    path(
-        "password-reset-complete/",
-        auth_views.PasswordResetCompleteView.as_view(template_name="users/password_reset_complete.html"),
-        name="password_reset_complete",
-    ),
 ]

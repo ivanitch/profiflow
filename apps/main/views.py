@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
+from django.views import View
 
 
-def home_page(request):
-    context = {
-        "title": "ProfiFlow 🦋 сервис онлайн-записи для бьюти-мастеров и студий",
-        "h1": "Hello, world! 👋",
-    }
+class IndexRedirectView(View):
+    """
+    Умный редирект с корня сайта.
+    """
 
-    return render(request, "main/home.html", context)
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('dashboard:home')
+        return redirect('users:login')
