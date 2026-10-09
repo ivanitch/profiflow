@@ -59,13 +59,7 @@ class MasterProfile(models.Model):
     last_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Фамилия")
     avatar = models.ImageField(upload_to="users/masters/avatars/", blank=True, null=True, verbose_name="Аватар")
 
-    city = models.ForeignKey(
-        "locations.City",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name="Город"
-    )
+    city = models.ForeignKey("locations.City", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Город")
     address = models.CharField(max_length=255, blank=True, null=True, verbose_name="Адрес (улица, дом, кабинет)")
 
     booking_slug = models.SlugField(

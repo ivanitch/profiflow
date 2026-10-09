@@ -35,14 +35,16 @@ def test_appointment_creation():
     appointment = Appointment.objects.create(
         master=master_user,
         customer=crm_customer,
-        service=service,
         start_time=now,
         end_time=now + timedelta(minutes=service.duration),
     )
 
-    # Проверки
+    appointment.services.add(service)
+
     assert Appointment.objects.count() == 1
     assert appointment.master.email == "master@test.com"
     assert appointment.customer.first_name == "Иван"
-    assert appointment.service.price == 1000
-    assert appointment.status == "pending"  # Проверяем дефолтный статус
+    first_service = appointment.services.first()
+    assert first_service is not None
+    assert first_service.price == 1000
+    assert appointment.status == "pending"
