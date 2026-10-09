@@ -22,20 +22,21 @@ class PublicBookingWidgetView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         # Находим профиль мастера по слагу в URL
-        master_profile = get_object_or_404(MasterProfile, booking_slug=self.kwargs['booking_slug'])
+        master_profile = get_object_or_404(MasterProfile, booking_slug=self.kwargs["booking_slug"])
 
         # Получаем активные услуги мастера с правильной сортировкой
-        context['services'] = Service.objects.filter(
-            master=master_profile.user,
-            is_deleted=False
-        ).select_related('category').order_by(
-            'category__order',  # 1. Сначала соблюдаем порядок самих категорий
-            'price',  # 2. Бесплатные (0 ₽) идут наверх, затем по возрастанию цены
-            'name'  # 3. При одинаковой цене сортируем по алфавиту
+        context["services"] = (
+            Service.objects.filter(master=master_profile.user, is_deleted=False)
+            .select_related("category")
+            .order_by(
+                "category__order",  # 1. Сначала соблюдаем порядок самих категорий
+                "price",  # 2. Бесплатные (0 ₽) идут наверх, затем по возрастанию цены
+                "name",  # 3. При одинаковой цене сортируем по алфавиту
+            )
         )
 
-        context['master'] = master_profile.user
-        context['master_profile'] = master_profile
+        context["master"] = master_profile.user
+        context["master_profile"] = master_profile
         # Достаем услуги мастера
         context["services"] = Service.objects.filter(master=master_profile.user, is_deleted=False).select_related(
             "category"
@@ -125,7 +126,7 @@ class CreateAppointmentView(View):
 
         # 2. Обрабатываем услуги (их может быть несколько)
         # Превращаем строку "1,2,3" в список чисел [1, 2, 3]
-        service_ids = [int(i) for i in service_ids_str.split(',') if i.isdigit()]
+        service_ids = [int(i) for i in service_ids_str.split(",") if i.isdigit()]
 
         # Получаем все выбранные активные услуги
         selected_services = Service.objects.filter(id__in=service_ids, master=master, is_deleted=False)
@@ -168,7 +169,7 @@ class CreateAppointmentView(View):
                 customer_comment=comment,
             )
 
-            # 6. Привязываем выбранные услуги к созданной записи
+            # Привязываем список выбранных услуг после создания записи
             appointment.services.set(selected_services)
 
             # 7. Уведомляем клиента об успехе
@@ -176,11 +177,7 @@ class CreateAppointmentView(View):
 
             # TODO: Вызов Celery таски для отправки Telegram-уведомления мастеру
 
-        except Exception as e:
-            # Временно выводим саму ошибку в терминал, чтобы понять причину
-            import traceback
-            traceback.print_exc()
-
+        except Exception:
             # Ловим остальные системные ошибки
             messages.error(request, "Произошла системная ошибка. Попробуйте позже.")
 
