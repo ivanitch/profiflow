@@ -62,12 +62,12 @@ class Appointment(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="appointments", verbose_name="Мастер"
     )
     customer = models.ForeignKey(
-        "customers.Customer",  # Предполагается наличие CRM приложения
+        "customers.Customer",
         on_delete=models.PROTECT,
         related_name="appointments",
         verbose_name="Клиент",
     )
-    service = models.ForeignKey("catalog.Service", on_delete=models.PROTECT, verbose_name="Услуга")
+    services = models.ManyToManyField("catalog.Service", verbose_name="Услуга")
 
     start_time = models.DateTimeField(db_index=True, verbose_name="Время начала записи")
     end_time = models.DateTimeField(db_index=True, verbose_name="Время окончания записи")
