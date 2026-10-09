@@ -111,55 +111,77 @@ class CreateAppointmentView(View):
         master = master_profile.user
 
         # 1. Извлекаем данные из POST-запроса
-        service_id = request.POST.get("service_id")
+        service_ids_str = request.POST.get("service_id", "")  # Тут может быть "1,2,3"
         date_str = request.POST.get("date")
         time_str = request.POST.get("time")
         first_name = request.POST.get("first_name")
         phone = request.POST.get("phone")
         comment = request.POST.get("comment", "")
 
-        # Базовая защита от пустых данных (на случай если JS на фронте отключен)
-        if not all([service_id, date_str, time_str, first_name, phone]):
+        # Базовая защита от пустых данных
+        if not all([service_ids_str, date_str, time_str, first_name, phone]):
             messages.error(request, "Пожалуйста, заполните все обязательные поля.")
             return redirect("public_booking:widget", booking_slug=booking_slug)
 
-        try:
-            # 2. Получаем услугу и вычисляем время окончания
-            service = get_object_or_404(Service, id=service_id, master=master, is_deleted=False)
+        # 2. Обрабатываем услуги (их может быть несколько)
+        # Превращаем строку "1,2,3" в список чисел [1, 2, 3]
+        service_ids = [int(i) for i in service_ids_str.split(',') if i.isdigit()]
 
+        # Получаем все выбранные активные услуги
+        selected_services = Service.objects.filter(id__in=service_ids, master=master, is_deleted=False)
+
+        if not selected_services.exists():
+            messages.error(request, "Пожалуйста, выберите хотя бы одну действующую услугу.")
+            return redirect("public_booking:widget", booking_slug=booking_slug)
+
+        # Считаем общую длительность выбранных услуг
+        total_duration = sum(service.duration for service in selected_services)
+
+        # 3. Обрабатываем дату и время в строгом try-except
+        try:
             """
             Собираем datetime (с учетом того, что это локальное время мастера
             - в идеале привязывать к таймзоне из MasterProfile)
             """
             start_datetime_naive = datetime.datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
             start_datetime = make_aware(start_datetime_naive)
-            end_datetime = start_datetime + datetime.timedelta(minutes=service.duration)
+            end_datetime = start_datetime + datetime.timedelta(minutes=total_duration)
+        except ValueError:
+            # Ошибка вылетит ТОЛЬКО если формат даты или времени неверный
+            messages.error(request, "Неверный формат даты или времени.")
+            return redirect("public_booking:widget", booking_slug=booking_slug)
 
-            # 3. CRM: Ищем существующего клиента по номеру или создаем нового
+        try:
+            # 4. CRM: Ищем существующего клиента по номеру или создаем нового
             customer, created = Customer.objects.get_or_create(
                 master=master, phone=phone, defaults={"first_name": first_name}
             )
 
             # Если клиент уже был, но сменил имя, можно обновить его здесь
 
-            # 4. Создаем запись
-            Appointment.objects.create(
+            # 5. Создаем запись (БЕЗ УСЛУГ, так как ManyToMany добавляется после сохранения)
+            appointment = Appointment.objects.create(
                 master=master,
                 customer=customer,
-                service=service,
                 start_time=start_datetime,
                 end_time=end_datetime,
                 customer_comment=comment,
             )
 
-            # 5. Уведомляем клиента об успехе
+            # 6. Привязываем выбранные услуги к созданной записи
+            appointment.services.set(selected_services)
+
+            # 7. Уведомляем клиента об успехе
             messages.success(request, f"Вы успешно записаны на {date_str} в {time_str}!")
 
             # TODO: Вызов Celery таски для отправки Telegram-уведомления мастеру
 
-        except ValueError:
-            messages.error(request, "Неверный формат даты или времени.")
-        except Exception:
+        except Exception as e:
+            # Временно выводим саму ошибку в терминал, чтобы понять причину
+            import traceback
+            traceback.print_exc()
+
+            # Ловим остальные системные ошибки
             messages.error(request, "Произошла системная ошибка. Попробуйте позже.")
 
         # Возвращаем клиента на страницу виджета

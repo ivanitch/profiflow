@@ -6,18 +6,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+    <!-- Инициализация темы без моргания -->
     <script>
         const savedTheme = localStorage.getItem('theme');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = savedTheme === 'dark' || (!savedTheme && systemDark);
 
-        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        if (isDark) {
             document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
         } else {
             document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
         }
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/imask"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css"/>
 
     <script>
@@ -46,35 +51,37 @@
         :root {
             --jira-bg: #f4f5f7;
             --jira-panel: #ffffff;
-            --jira-border: #ebecf0;
-            --jira-text: #5e6c84;
-            --jira-textBright: #172b4d;
-            --jira-primary: #0c66e4;
-            --jira-primaryHover: #0052cc;
-            --jira-accent: #0c66e4;
-            --jira-accentBg: #e9f2ff;
+            --jira-border: #e5e7eb; /* Мягкий серый для рамок */
+            --jira-text: #6b7280;
+            --jira-textBright: #111827;
+
+            /* Новые цвета: Фиолетовый (Primary) и Бирюзовый (Accent) */
+            --jira-primary: #9333ea;       /* purple-600 */
+            --jira-primaryHover: #7e22ce;  /* purple-700 */
+            --jira-accent: #0d9488;        /* teal-600 */
+            --jira-accentBg: #f0fdfa;      /* teal-50 */
         }
 
         .dark {
-            --jira-bg: #1d2125;
-            --jira-panel: #22272b;
-            --jira-border: #282f36;
-            --jira-text: #8c9bab;
-            --jira-textBright: #b6c2cf;
-            --jira-primary: #0c66e4;
-            --jira-primaryHover: #0052cc;
-            --jira-accent: #579dff;
-            --jira-accentBg: #1c2b41;
+            --jira-bg: #111827; /* gray-900 */
+            --jira-panel: #1f2937; /* gray-800 */
+            --jira-border: #374151; /* gray-700 */
+            --jira-text: #9ca3af;
+            --jira-textBright: #f9fafb;
+
+            /* Неоновые аналоги для темной темы */
+            --jira-primary: #a855f7;       /* purple-500 */
+            --jira-primaryHover: #9333ea;  /* purple-600 */
+            --jira-accent: #2dd4bf;        /* teal-400 */
+            --jira-accentBg: #134e4a;      /* teal-900 */
         }
 
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .dates-scroll::-webkit-scrollbar { height: 6px; display: block; }
+        .dates-scroll::-webkit-scrollbar-thumb { background: var(--jira-border); border-radius: 4px; }
+        @media (max-width: 768px) { .dates-scroll::-webkit-scrollbar { display: none; } }
 
         .input:focus, .textarea:focus {
             outline: none;
@@ -88,21 +95,17 @@
 
 <div class="w-full max-w-md bg-jira-panel min-h-screen sm:min-h-auto sm:h-212.5 sm:mt-10 sm:rounded-lg sm:border border-jira-border shadow-xl flex flex-col overflow-hidden relative">
 
-    <div class="absolute top-4 left-4 right-4 z-50" id="toast-container">
+    <div class="absolute bottom-20 left-4 right-4 z-[100] pointer-events-none flex flex-col gap-2" id="toast-container">
         {% include 'common/messages.html' %}
     </div>
 
-    <form method="POST" action="
-
-
-            {% if master_profile %}{% url 'public_booking:create' booking_slug=master_profile.booking_slug %}{% else %}#{% endif %}"
-          id="booking-form" class="flex flex-col h-full w-full">
+    <form method="POST" action="{% if master_profile %}{% url 'public_booking:create' booking_slug=master_profile.booking_slug %}{% else %}#{% endif %}" id="booking-form" class="flex flex-col h-full w-full">
         {% csrf_token %}
 
-        <div class="relative h-28 bg-linear-to-r from-blue-800 to-indigo-900 shrink-0">
+        <div class="relative h-28 bg-gradient-to-r from-purple-800 to-teal-900 shrink-0">
             <div class="absolute -bottom-8 left-6">
-                <div class="avatar shadow-md rounded-md">
-                    <div class="w-16 h-16 rounded-md ring-4 ring-jira-panel bg-indigo-800 text-indigo-100 flex items-center justify-center text-xl font-bold overflow-hidden">
+                <div class="avatar shadow-md rounded-sm">
+                    <div class="w-16 h-16 rounded-sm ring-4 ring-jira-panel bg-purple-900 text-purple-100 flex items-center justify-center text-xl font-bold overflow-hidden">
                         {% if master.profile.avatar %}
                             <img src="{{ master.profile.avatar.url }}" alt="{{ master.first_name }}">
                         {% else %}
@@ -112,39 +115,28 @@
                 </div>
             </div>
 
-            <button type="button" id="theme-toggle"
-                    class="absolute top-4 right-4 p-1.5 rounded-md bg-black/20 text-white hover:bg-black/40 backdrop-blur-sm transition-colors">
-                <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4" fill="none" stroke="currentColor"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            <button type="button" id="theme-toggle" class="absolute top-4 right-4 p-1.5 rounded-sm bg-black/20 text-white hover:bg-black/40 backdrop-blur-sm transition-colors">
+                <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                 </svg>
-                <svg id="theme-toggle-light-icon" class="hidden w-4 h-4" fill="none" stroke="currentColor"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                <svg id="theme-toggle-light-icon" class="hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
             </button>
         </div>
 
         <div class="pt-10 px-6 pb-5 border-b border-jira-border shrink-0">
             <h1 class="text-xl font-bold text-jira-textBright">
-                {{ master_profile.first_name }}
-                {% if master_profile.last_name %}
-                    {{ master_profile.last_name|slice:":1" }}.
-                {% endif %}
+                {{ master_profile.short_name|default:"Имя Мастера" }}
             </h1>
-            <p class="text-xs text-jira-text mt-1">
-                {{ master_profile.city|default:"Город не указан" }}
-            </p>
+
             <div class="mt-3 flex items-center gap-2 text-xs text-jira-text">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                г. {{ master.profile.city.name|default:"Ваш город" }}
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                {{ master_profile.city|default:"Город не указан" }}
+            </div>
+            <div class="mt-1.5 flex items-center gap-2 text-xs text-jira-text">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                {{ master_profile.address|default:"Адрес не указан" }}
             </div>
         </div>
 
@@ -156,38 +148,27 @@
 
                 <input type="hidden" name="service_id" id="selected_service" value="" required>
 
-                <!-- Группируем услуги по категории -->
                 {% regroup services by category as category_list %}
 
                 {% for category in category_list %}
-                    <!-- open у первой категории, чтобы она была развернута по умолчанию -->
-                    <details
-                            class="collapse collapse-arrow bg-jira-bg border border-jira-border rounded-md overflow-visible"
-                            {% if forloop.first %}open{% endif %}>
-                        <summary
-                                class="collapse-title text-sm font-semibold text-jira-textBright min-h-0 h-12 py-0 flex items-center px-4 cursor-pointer">
+                    <details class="collapse collapse-arrow bg-jira-bg rounded-sm overflow-visible" {% if forloop.first %}open{% endif %}>
+                        <summary class="collapse-title text-sm font-semibold text-jira-textBright min-h-0 h-12 py-0 flex items-center px-4 cursor-pointer bg-gray-100 dark:bg-[#22272b] border-b border-jira-border">
                             {{ category.grouper.name|default:"Без категории" }}
                         </summary>
                         <div class="collapse-content px-3 pb-3 flex flex-col gap-2">
-
-                            <!-- Выводим услуги внутри этой категории -->
                             {% for service in category.list %}
-                                <div class="js-service-card bg-jira-bg border border-jira-border rounded-md p-3 cursor-pointer hover:border-jira-text transition-colors flex justify-between items-center group"
+                                <!-- Заметь: у карточки изначально стоит border-2 border-gray-200, чтобы не было "прыжка" при выборе -->
+                                <div class="js-service-card bg-jira-panel border-2 border-gray-200 dark:border-[#38414a] shadow-sm rounded-sm p-3.5 cursor-pointer hover:border-jira-accent hover:shadow-md transition-all flex justify-between items-center group"
                                      data-id="{{ service.id }}" data-price="{{ service.price|floatformat:0 }}">
                                     <div class="flex flex-col gap-1">
                                         <span class="js-service-title font-medium text-jira-textBright group-hover:text-jira-textBright transition-colors">{{ service.name }}</span>
                                         <span class="text-xs text-jira-text">{{ service.formatted_duration }}</span>
                                     </div>
                                     <span class="font-semibold text-jira-textBright">
-                                {% if service.price == 0 %}
-                                    Бесплатно
-                                {% else %}
-                                    {{ service.price|floatformat:0 }} ₽
-                                {% endif %}
-                            </span>
+                                        {% if service.price == 0 %} Бесплатно {% else %} {{ service.price|floatformat:0 }} ₽ {% endif %}
+                                    </span>
                                 </div>
                             {% endfor %}
-
                         </div>
                     </details>
                 {% empty %}
@@ -199,17 +180,15 @@
             <div class="flex flex-col gap-3">
                 <div class="flex justify-between items-end">
                     <h2 class="text-xs font-semibold text-jira-text uppercase tracking-wide">2. Дата и время</h2>
-                    <span class="text-[10px] text-jira-text font-medium uppercase"
-                          id="current-month-display">Месяц</span>
+                    <span class="text-[10px] text-jira-text font-medium uppercase" id="current-month-display">Месяц</span>
                 </div>
 
                 <input type="hidden" name="date" id="selected_date" value="" required>
                 <input type="hidden" name="time" id="selected_time" value="" required>
 
-                <!-- Даты (Скролл по горизонтали) -->
-                <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar -mx-2 px-2" id="dates-container">
+                <div class="flex gap-2 overflow-x-auto pb-2 dates-scroll -mx-2 px-2" id="dates-container">
                     {% for date in available_dates %}
-                        <div class="js-date-card shrink-0 w-12 py-2 bg-jira-bg border border-jira-border text-jira-textBright rounded-md flex flex-col items-center justify-center text-center cursor-pointer hover:border-jira-text transition-colors"
+                        <div class="js-date-card shrink-0 w-12 py-2 bg-jira-bg border border-jira-border text-jira-textBright rounded-sm flex flex-col items-center justify-center text-center cursor-pointer hover:border-jira-text transition-colors"
                              data-date="{{ date.iso }}" data-month="{{ date.month_name }}">
                             <span class="text-[10px] uppercase opacity-90 js-date-day">{{ date.weekday }}</span>
                             <span class="text-base font-semibold">{{ date.day }}</span>
@@ -217,23 +196,13 @@
                     {% endfor %}
                 </div>
 
-                <!-- Время (Сетка) -->
                 <div class="grid grid-cols-4 gap-2 mt-2" id="times-container">
-                    <div class="py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-transparent text-jira-text opacity-40 cursor-not-allowed line-through">
-                        10:00
-                    </div>
-
-                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors"
-                         data-time="11:00">11:00
-                    </div>
-
-                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors"
-                         data-time="13:30">13:30
-                    </div>
-
-                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-md bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors"
-                         data-time="15:00">15:00
-                    </div>
+                    <div class="py-2 text-center text-xs font-medium rounded-sm bg-jira-bg border border-transparent text-jira-text opacity-40 cursor-not-allowed line-through">10:00</div>
+                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-sm bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors" data-time="11:00">11:00</div>
+                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-sm bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors" data-time="13:30">13:30</div>
+                    <div class="py-2 text-center text-xs font-medium rounded-sm bg-jira-bg border border-transparent text-jira-text opacity-40 cursor-not-allowed line-through">15:00</div>
+                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-sm bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors" data-time="17:00">17:00</div>
+                    <div class="js-time-slot py-2 text-center text-xs font-medium rounded-sm bg-jira-bg border border-jira-border text-jira-textBright hover:border-jira-text cursor-pointer transition-colors" data-time="18:30">18:30</div>
                 </div>
             </div>
 
@@ -241,22 +210,20 @@
             <div class="flex flex-col gap-3">
                 <h2 class="text-xs font-semibold text-jira-text uppercase tracking-wide">3. Ваши данные</h2>
                 <div class="flex flex-col gap-3">
-                    <input type="text" name="first_name" required placeholder="Ваше имя"
-                           class="input w-full bg-jira-bg border-jira-border text-jira-textBright h-10 px-3 rounded-md"/>
-                    <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__"
-                           class="input w-full bg-jira-bg border-jira-border text-jira-textBright h-10 px-3 rounded-md"/>
-                    <textarea name="comment"
-                              class="textarea w-full bg-jira-bg border-jira-border text-jira-textBright h-16 py-2 px-3 leading-relaxed rounded-md"
-                              placeholder="Комментарий мастеру (необязательно)"></textarea>
+                    <input type="text" name="first_name" placeholder="Ваше имя" class="input w-full bg-jira-bg border-jira-border text-jira-textBright h-10 px-3 rounded-sm"/>
+                    <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" class="input w-full bg-jira-bg border-jira-border text-jira-textBright h-10 px-3 rounded-sm"/>
+                    <textarea name="comment" class="textarea w-full bg-jira-bg border-jira-border text-jira-textBright h-16 py-2 px-3 leading-relaxed rounded-sm" placeholder="Комментарий мастеру (необязательно)"></textarea>
                 </div>
             </div>
+
+            <!-- Контейнер для калькулятора выбранных услуг -->
+            <div id="selected-services-list"></div>
 
         </div>
 
         <!-- Подвал с фиксированной кнопкой -->
         <div class="absolute bottom-0 w-full bg-jira-panel border-t border-jira-border p-4 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
-            <button type="submit" id="submit-btn"
-                    class="w-full py-3 h-12 bg-jira-primary text-white rounded-md text-sm font-semibold hover:bg-jira-primaryHover transition-all shadow-sm flex justify-between items-center px-5 focus:scale-[0.98]">
+            <button type="submit" id="submit-btn" class="w-full py-3 h-12 bg-jira-primary text-white rounded-sm text-sm font-semibold hover:bg-jira-primaryHover transition-all duration-300 shadow-sm flex justify-between items-center px-5 focus:scale-[0.98] opacity-60 saturate-0">
                 <span>Подтвердить запись</span>
                 <span id="submit-price">0 ₽</span>
             </button>
@@ -265,10 +232,9 @@
     </form>
 </div>
 
-<!-- Интерактивная логика формы -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. Управление темой
+        // --- 1. ТЕМА ---
         const themeToggleBtn = document.getElementById('theme-toggle');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
@@ -279,45 +245,95 @@
             darkIcon.classList.remove('hidden');
         }
 
-        themeToggleBtn.addEventListener('click', function () {
+        themeToggleBtn.addEventListener('click', function() {
             darkIcon.classList.toggle('hidden');
             lightIcon.classList.toggle('hidden');
 
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
+                document.documentElement.setAttribute('data-theme', 'light');
                 localStorage.setItem('theme', 'light');
             } else {
                 document.documentElement.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('theme', 'dark');
             }
         });
 
-        // 2. Логика выбора услуг
-        const serviceCards = document.querySelectorAll('.js-service-card');
-        const selectedServiceInput = document.getElementById('selected_service');
-        const submitPriceDisplay = document.getElementById('submit-price');
+        // --- 2. ВОССТАНОВЛЕНИЕ ДАННЫХ ИЗ LOCALSTORAGE ---
+        const phoneInput = document.querySelector('input[name="phone"]');
+        const nameInput = document.querySelector('input[name="first_name"]');
+        const commentInput = document.querySelector('textarea[name="comment"]');
 
-        serviceCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Сбрасываем все стили
-                serviceCards.forEach(c => {
-                    c.classList.remove('bg-jira-accentBg', 'border-2', 'border-jira-accent');
-                    c.classList.add('bg-jira-bg', 'border', 'border-jira-border');
-                    c.querySelector('.js-service-title').classList.remove('text-jira-accent');
-                });
+        const phoneMask = IMask(phoneInput, {mask: '+{7} (000) 000-00-00'});
 
-                // Устанавливаем активный стиль
-                card.classList.remove('bg-jira-bg', 'border', 'border-jira-border');
-                card.classList.add('bg-jira-accentBg', 'border-2', 'border-jira-accent');
-                card.querySelector('.js-service-title').classList.add('text-jira-accent');
+        const fieldsToSave = [
+            { el: nameInput, key: 'booking_first_name' },
+            { el: phoneInput, key: 'booking_phone' },
+            { el: commentInput, key: 'booking_comment' }
+        ];
 
-                // Обновляем скрытый инпут и цену на кнопке
-                selectedServiceInput.value = card.dataset.id;
-                submitPriceDisplay.textContent = card.dataset.price + ' ₽';
+        fieldsToSave.forEach(field => {
+            const savedValue = localStorage.getItem(field.key);
+            if (savedValue) {
+                field.el.value = savedValue;
+                if (field.el === phoneInput) phoneMask.updateValue();
+            }
+            field.el.addEventListener('input', () => {
+                localStorage.setItem(field.key, field.el.value);
             });
         });
 
-        // 3. Логика выбора даты
+        // --- 3. ВЫБОР УСЛУГ (МНОЖЕСТВЕННЫЙ) ---
+        const serviceCards = document.querySelectorAll('.js-service-card');
+        const selectedServiceInput = document.getElementById('selected_service');
+        const submitPriceDisplay = document.getElementById('submit-price');
+        const selectedListContainer = document.getElementById('selected-services-list');
+        let selectedServices = new Map();
+
+        function updateCart() {
+            let totalPrice = 0;
+            let htmlList = '';
+            let ids = [];
+
+            selectedServices.forEach((data, id) => {
+                totalPrice += data.price;
+                ids.push(id);
+                htmlList += `<div class="text-xs text-jira-text flex justify-between"><span>• ${data.name}</span></div>`;
+            });
+
+            selectedServiceInput.value = ids.join(',');
+            submitPriceDisplay.textContent = totalPrice > 0 ? `${totalPrice} ₽` : '0 ₽';
+
+            if (selectedListContainer) {
+                selectedListContainer.innerHTML = htmlList ? `<div class="mb-3 p-3 bg-jira-bg rounded-sm border border-jira-border flex flex-col gap-1"><span class="text-xs font-semibold text-jira-textBright mb-1">Выбранные услуги:</span>${htmlList}</div>` : '';
+            }
+
+            wakeUpButton();
+        }
+
+        serviceCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.dataset.id;
+                const price = parseFloat(card.dataset.price);
+                const name = card.querySelector('.js-service-title').textContent;
+
+                if (selectedServices.has(id)) {
+                    selectedServices.delete(id);
+                    card.classList.remove('bg-jira-accentBg', 'border-jira-accent', 'shadow-md');
+                    card.classList.add('bg-jira-panel', 'border-gray-200', 'dark:border-[#38414a]', 'shadow-sm');
+                    card.querySelector('.js-service-title').classList.remove('text-jira-accent');
+                } else {
+                    selectedServices.set(id, {name, price});
+                    card.classList.remove('bg-jira-panel', 'border-gray-200', 'dark:border-[#38414a]', 'shadow-sm');
+                    card.classList.add('bg-jira-accentBg', 'border-jira-accent', 'shadow-md');
+                    card.querySelector('.js-service-title').classList.add('text-jira-accent');
+                }
+                updateCart();
+            });
+        });
+
+        // --- 4. ВЫБОР ДАТЫ И ВРЕМЕНИ ---
         const dateCards = document.querySelectorAll('.js-date-card');
         const selectedDateInput = document.getElementById('selected_date');
         const currentMonthDisplay = document.getElementById('current-month-display');
@@ -337,78 +353,101 @@
                 card.querySelector('.js-date-day').classList.add('text-white');
 
                 selectedDateInput.value = card.dataset.date;
-                if (card.dataset.month) {
-                    currentMonthDisplay.textContent = card.dataset.month;
-                }
+                if(card.dataset.month) currentMonthDisplay.textContent = card.dataset.month;
 
-                // Сбрасываем выбранное время при смене даты
+                // Сброс времени при смене даты
                 selectedTimeInput.value = "";
                 timeSlots.forEach(t => {
-                    t.classList.remove('bg-jira-accent', 'text-white', 'border-transparent', 'shadow-sm');
-                    t.classList.add('bg-jira-bg', 'border-jira-border', 'text-jira-textBright');
+                    if (!t.classList.contains('cursor-not-allowed')) {
+                        t.classList.remove('bg-jira-accent', 'text-white', 'border-transparent', 'shadow-sm');
+                        t.classList.add('bg-jira-bg', 'border-jira-border', 'text-jira-textBright');
+                    }
                 });
+
+                wakeUpButton(); // НОВОЕ: Проверяем кнопку при выборе даты
             });
         });
 
-        // 4. Логика выбора времени
         const timeSlots = document.querySelectorAll('.js-time-slot');
         const selectedTimeInput = document.getElementById('selected_time');
 
         timeSlots.forEach(slot => {
             slot.addEventListener('click', () => {
+                if (slot.classList.contains('cursor-not-allowed')) return;
+
                 timeSlots.forEach(t => {
-                    t.classList.remove('bg-jira-accent', 'text-white', 'border-transparent', 'shadow-sm');
-                    t.classList.add('bg-jira-bg', 'border-jira-border', 'text-jira-textBright');
+                    if (!t.classList.contains('cursor-not-allowed')) {
+                        t.classList.remove('bg-jira-accent', 'text-white', 'border-transparent', 'shadow-sm');
+                        t.classList.add('bg-jira-bg', 'border-jira-border', 'text-jira-textBright');
+                    }
                 });
 
                 slot.classList.remove('bg-jira-bg', 'border-jira-border', 'text-jira-textBright');
                 slot.classList.add('bg-jira-accent', 'text-white', 'border-transparent', 'shadow-sm');
 
                 selectedTimeInput.value = slot.dataset.time;
+
+                wakeUpButton(); // НОВОЕ: Проверяем кнопку при выборе времени
             });
         });
 
-        // 5. Валидация перед отправкой формы
+        // --- 5. УМНАЯ ВАЛИДАЦИЯ ПЕРЕД ОТПРАВКОЙ ---
         const form = document.getElementById('booking-form');
         const toastContainer = document.getElementById('toast-container');
 
         function showToast(message) {
             const toast = document.createElement('div');
-            toast.className = 'alert alert-error rounded-md shadow-md flex items-start text-sm w-full mb-2 opacity-0 transition-opacity duration-300';
+            toast.className = 'alert alert-error rounded-md shadow-md flex items-start text-sm w-full mb-2 opacity-0 transition-opacity duration-300 pointer-events-auto';
             toast.innerHTML = `
-                    <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="flex-1">${message}</span>
-                `;
+                <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="flex-1">${message}</span>
+                <button type="button" class="btn btn-ghost btn-xs btn-circle opacity-70 hover:opacity-100" onclick="this.closest('.alert').remove()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            `;
             toastContainer.appendChild(toast);
 
-            // Анимация появления
             setTimeout(() => toast.classList.remove('opacity-0'), 10);
-            // Автоудаление через 3 секунды
             setTimeout(() => {
-                toast.classList.add('opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+                if(toast.parentNode) {
+                    toast.classList.add('opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 4000);
         }
 
         form.addEventListener('submit', (e) => {
-            if (!selectedServiceInput.value) {
-                e.preventDefault();
-                showToast('Пожалуйста, выберите услугу');
-                return;
-            }
-            if (!selectedDateInput.value) {
-                e.preventDefault();
-                showToast('Пожалуйста, выберите дату');
-                return;
-            }
-            if (!selectedTimeInput.value) {
-                e.preventDefault();
-                showToast('Пожалуйста, выберите время');
-                return;
-            }
+            let errors = [];
 
-            // Если все ок - форма отправится на бэкенд
+            if (selectedServices.size === 0) errors.push('Выберите хотя бы одну услугу');
+            if (!selectedDateInput.value) errors.push('Выберите дату визита');
+            if (!selectedTimeInput.value) errors.push('Выберите время визита');
+            if (nameInput.value.trim() === '') errors.push('Введите ваше имя');
+            if (phoneMask.unmaskedValue.length !== 11) errors.push('Введите номер телефона полностью');
+
+            if (errors.length > 0) {
+                e.preventDefault();
+                errors.reverse().forEach(err => showToast(err));
+            }
         });
+
+        // --- 6. НОВОЕ: ЛОГИКА ПРОБУЖДЕНИЯ КНОПКИ ---
+        const submitBtn = document.getElementById('submit-btn');
+
+        function wakeUpButton() {
+            // Оставляем проверку только ключевых действий для записи
+            const hasServices = selectedServices.size > 0;
+            const hasDate = selectedDateInput.value !== '';
+            const hasTime = selectedTimeInput.value !== '';
+
+            // Кнопка просыпается только если выбрана услуга, дата или время
+            if (hasServices || hasDate || hasTime) {
+                submitBtn.classList.remove('opacity-60', 'saturate-0');
+            } else {
+                submitBtn.classList.add('opacity-60', 'saturate-0');
+            }
+        }
+        wakeUpButton();
     });
 </script>
 </body>

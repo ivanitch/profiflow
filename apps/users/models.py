@@ -57,10 +57,16 @@ class MasterProfile(models.Model):
 
     first_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Имя")
     last_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Фамилия")
-
     avatar = models.ImageField(upload_to="users/masters/avatars/", blank=True, null=True, verbose_name="Аватар")
 
-    city = models.ForeignKey("locations.City", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Город")
+    city = models.ForeignKey(
+        "locations.City",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Город"
+    )
+    address = models.CharField(max_length=255, blank=True, null=True, verbose_name="Адрес (улица, дом, кабинет)")
 
     booking_slug = models.SlugField(
         max_length=100,
@@ -74,8 +80,25 @@ class MasterProfile(models.Model):
 
     timezone = models.CharField(max_length=50, default="Asia/Yakutsk", verbose_name="Часовой пояс")
     currency = models.CharField(max_length=10, default="RUB", verbose_name="Валюта")
-
     is_onboarding_completed = models.BooleanField(default=False, verbose_name="Онбординг пройден")
+
+    @property
+    def short_name(self):
+        """Возвращает имя (или 'Мастер' по умолчанию) и первую букву фамилии (например, 'Анастасия В.')"""
+        name = self.first_name if self.first_name else "Мастер"
+
+        if self.last_name:
+            return f"{name} {self.last_name[:1]}."
+        return name
+
+    @property
+    def full_name(self):
+        """Возвращает имя (или 'Мастер' по умолчанию) и фамилию (например, 'Анастасия Власова')"""
+        name = self.first_name if self.first_name else "Мастер"
+
+        if self.last_name:
+            return f"{name} {self.last_name}"
+        return name
 
     class Meta:
         db_table = "users_master_profile"

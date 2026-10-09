@@ -31,7 +31,7 @@ sudo usermod -aG docker $USER && newgrp docker
 git clone https://github.com/ivanitch/profiflow.git profiflow
 cd profiflow
 cp .env.prod.example .env.prod
-nano .env.prod
+micro .env.prod
 ```
 
 > Для генерации секретного ключа прямо на сервере выполнить и записать ключ в `.env.prod`
